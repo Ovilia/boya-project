@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>BoYa</title>
+		
+		<script type="text/javascript">
+			var browser=navigator.appName;
+			if (browser == 'Microsoft Internet Explorer')
+			{
+				//window.navigate("browser.php");
+			}
+		</script>
+		
+        <link rel="stylesheet" type="text/css" href="common.css">
+        <link rel="stylesheet" type="text/css" href="buttons.css">
+<!--[if IE 6]>
+<style type="text/css">
+html{overflow:hidden;}
+body{height:100%;overflow:auto;}
+#left {position:absolute;right:17px;}
+</style>
+<![endif]-->
+<!--[if lt IE 6]>
+<style type="text/css">
+#left{position:absolute;top:expression(eval(document.body.scrollTop + 50));}
+</style>
+<![endif]-->
+<!--[if IE 6]>
+<style type="text/css">
+html{overflow:hidden;}
+body{height:100%;overflow:auto;}
+#left {position:absolute;}
+</style>
+<![endif]-->
+<!--[if lt IE 6]>
+<style type="text/css">
+#left{position:absolute;top:expression(eval(document.body.scrollTop + 50));}
+</style>
+<![endif]-->
+
+		<script type="text/javascript">
+			function loadXMLDoc()
+			{
+				var xmlhttp;
+				//for IE7+, Firefox, Chrome, Opera, Safari
+				if (window.XMLHttpRequest)
+				{
+					xmlhttp = new XMLHttpRequest();
+				}
+				//for IE6, IE5
+				else
+				{
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				xmlhttp.onreadystatechange = function()
+				{
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+					{
+						document.getElementById("right").innerHTML += xmlhttp.responseText;
+					}
+				}
+				xmlhttp.open("GET", "../write.php", true);
+				xmlhttp.send();
+			}
+		</script>
+    </head>
+    <body>
+        <div id="top">
+            <img src="images/BoYa.png" style="float: left; margin-left: 30px; margin-right: 30px;"/>
+            <div id="nav">
+                <a href="#">首页</a> | <a href="#">个人设置</a> | <a href="#">随便看看</a>
+            </div>
+        </div>
+
+        <div id="main">
+            <div id="left">
+                <img src="images/user.jpeg" width="70px" height="70px"
+                     style="float: left; padding: 0 10px 10px 0;"/>
+                <a href="#">Ovilia</a>
+                <hr style="margin:2px">
+
+            </div>
+            <div id="right">
+                This is right
+                <a href="#" class="button big orange" onclick="loadXMLDoc()">Big Button</a>
+            </div>
+        </div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <div id="footer">
+            This is footer
+        </div>
+    </body>
+</html>
