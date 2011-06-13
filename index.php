@@ -67,7 +67,7 @@
 				</form>
             </div>
             <div id="right" style="font-size:20px; text-align: center;">
-				<img src="images/no.png" />
+				<img src="images/back.jpg" />
 				高山流水遇知音<br>
 				在这里，与你的子期不期而遇<br>
             </div>				
