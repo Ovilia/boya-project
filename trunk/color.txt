@@ -1,6 +1,6 @@
-#ffffcc;/*浅黄*/
-#CD5C5C;/*红色*/
-#ffb533;/*橙色*/
+#eeff34;/*yellow*/
+#CD5C5C;/*red*/
+#ffb533;/*orange*/
 
 
 button�÷���
