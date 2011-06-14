@@ -9,15 +9,6 @@
             header("location:index.php");
         }
         ?>
-
-        <script type="text/javascript">
-            var browser=navigator.appName;
-            if (browser == 'Microsoft Internet Explorer')
-            {
-                //window.navigate("browser.php");
-            }
-        </script>
-
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/buttons.css">
         <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
@@ -51,27 +42,59 @@
         </div>
         <div id="main">
             <div id="left">
-                <img src=<?php echo $imageUrl; ?> width="70px" height="70px"
-                     style="float: left; padding: 0 10px 10px 0;"/>
-                <a href="#">
-                    <?php
-                    session_start();
-                    echo $_SESSION['user_name'];
-                    ?>
-                </a>
-                <hr style="margin:2px">
-
+                <div id="leftTop">
+                    <img src="<?php echo $imageUrl; ?>" width="70px" height="70px"
+                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
+                    <a href="#">
+                        <?php
+                        session_start();
+                        echo $_SESSION['user_name'];
+                        ?>
+                    </a>
+                    <hr style="margin:2px">
+                    <div id="website">
+                        <a href="http://blog.sina.com.cn/plainjane001" title="访问ta的个人网站">
+                            http://blog.sina.com.cn/plainjane001
+                        </a>
+                    </div>
+                </div>
+                关注&nbsp;<a href="#">12</a>&nbsp;|&nbsp;
+                粉丝&nbsp;<a href="#">32</a>&nbsp;|&nbsp;
+                回答&nbsp;<a href="#">41</a>&nbsp;
+                <hr>
+                <h3>最相似的人</h3>
+                <div class="userImg">
+                    <img src="<?php echo loadImage('hfdusifh'); ?>"
+                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
+                    <a href="#">djias</a><br>
+					相似度&nbsp;98%<br>
+					准确性&nbsp;60%
+                </div>
+				<div class="userImg">
+                    <img src="<?php echo loadImage('dhauodjs'); ?>"
+                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
+                    <a href="#">frnja</a><br>
+					相似度&nbsp;95%<br>
+					准确性&nbsp;30%
+                </div>
+				<div class="userImg">
+                    <img src="<?php echo loadImage('hduaio'); ?>"
+                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
+                    <a href="#">djaiu</a><br>
+					相似度&nbsp;90%<br>
+					准确性&nbsp;10%
+                </div>
             </div>
             <div id="right">
                 <div id="question">
                     <div id="questionPanel"></div>
                     <div id="commandPanel">
-                        <div id="yes" class="command">是</div>
-                        <div id="no" class="command">否</div>
-                        <div id="next" class="command">不回答</div>
+                        <a href="#" class="button small orange">是</a>
+                        <a href="#" class="button small orange">否</a>
+                        <a href="#" class="button small orange">跳过</a>
                     </div>
                 </div>
-                <!--<a href="#" class="button big orange" onclick="loadXMLDoc()">Big Button</a>-->
+               这里有些<a href="#">文字</a>
             </div>
         </div>
         <div id="footer">

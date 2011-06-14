@@ -13,7 +13,7 @@
     vertical-align:baseline;
     position:relative;
     cursor:pointer;
-    padding:10px 20px;
+    padding:5px 10px;
 
     background-repeat:no-repeat;
 
@@ -69,7 +69,6 @@
 .button.big		{ font-size:30px;}
 .button.medium	{ font-size:18px;}
 .button.small	{ font-size:13px;}
-
 /* A more rounded button */
 
 .button.rounded{

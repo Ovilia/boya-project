@@ -12,7 +12,7 @@
  * @return String containing either just a URL or a complete image tag
  * @source http://gravatar.com/site/implement/images/php/
  */
-function loadImage($email, $s = 60, $d = 'mm', $r = 'g', $img = false, $atts = array()) {
+function loadImage($email, $s = 60, $d = 'identicon', $r = 'g', $img = false, $atts = array()) {
     $url = 'http://www.gravatar.com/avatar/';
     $url .= md5(strtolower(trim($email)));
     $url .= "?s=$s&d=$d&r=$r";
