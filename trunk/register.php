@@ -64,10 +64,10 @@
                         alert('请填写*部分');
                         return false;
                     }else{
-						if (!checkLength(email, "email", 4, 64)||
-							!checkLength(password, "password", 4, 32)||
-							!checkLength(repassword, "retype password", 4, 32)||
-							!checkLength(username, "username", 4, 32)){
+						if (!checkLength(email, "email", 4, 32)||
+							!checkLength(password, "password", 4, 16)||
+							!checkLength(repassword, "retype password", 4, 16)||
+							!checkLength(username, "username", 4, 16)){
 								return false;
 						}							
 						
@@ -96,8 +96,6 @@
 							return false;
 						}
 						
-						var d = new Date();
-						document.getElementById("registerDate").value = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 						document.forms["registerForm"].submit();
 					}
 				}				
@@ -132,7 +130,7 @@
 					注册 - 伯牙网
 				</h2>
 				<hr>
-				<form id="registerForm" action="registerValid.php" method="get">
+				<form id="registerForm" action="registerValid.php" method="post">
 					<table>
 						<tr>
 							<td style="text-align:right;" width="120px;">
@@ -140,7 +138,10 @@
 							</td><td>
 								<span class="required_mark">(*)</span>
 							</td><td>
-								<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" trim=true id="username" name="username" required="true" regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" promptMessage="用户名至少为5-16个字符的英文字母或是数字">
+								<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
+								trim=true id="username" name="username" required="true" 
+								regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" 
+								promptMessage="用户名至少为4-16个字符的英文字母或是数字">
 							</td>
 						</tr>
 						<tr>
@@ -149,7 +150,10 @@
 							</td><td>
 								<span class="required_mark">(*)</span>
 							</td><td>
-								<input type="password" maxlength="16" dojoType="dijit.form.ValidationTextBox" trim=true id="password" name="password" required="true" regExp="[A-Za-z0-9_]{5,}" invalidMessage="无效的密码" promptMessage="密码至少为5-16个字符的英文字母、数字或下划线">
+								<input type="password" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
+								trim=true id="password" name="password" required="true" 
+								regExp="[A-Za-z0-9_]{5,}" invalidMessage="无效的密码" 
+								promptMessage="密码至少为4-16个字符的英文字母、数字或下划线">
 							</td>
 						</tr>
 						<tr>
@@ -158,7 +162,9 @@
 							</td><td>
 								<span class="required_mark">(*)</span>
 							</td><td>						
-								<input maxlength="20" type="password" dojoType="dijit.form.ValidationTextBox"  id="repassword" name="repassword" required=true invalidMessage="无效的密码">
+								<input maxlength="16" type="password" dojoType="dijit.form.ValidationTextBox"  
+								id="repassword" name="repassword" required=true invalidMessage="无效的密码"
+								validator="return this.getValue() == dijit.byId('password').getValue()">
 							</td>
 						</tr>
 						<tr>
@@ -167,7 +173,7 @@
 							</td><td>
 								<span class="required_mark">(*)</span>
 							</td><td>
-								<input maxlength="32" dojoType="dijit.form.ValidationTextBox" id="email" promptMessage="邮箱最大长度32位" invalidMessage="无效的电子邮件格式" required=true regExp="[A-Za-z0-9._%=-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,4}">
+								<input maxlength="32" dojoType="dijit.form.ValidationTextBox" id="email" name="email" promptMessage="邮箱最大长度32位" invalidMessage="无效的电子邮件格式" required=true regExp="[A-Za-z0-9._%=-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,4}">
 							</td>
 						</tr>
 						<tr>
@@ -184,7 +190,7 @@
 								<label for="website">个人网址:</label>
 							</td><td>
 							</td><td>
-								<input type="text" maxlength="50" dojoType="dijit.form.ValidationTextBox" trim=true id="website" name="website" regExp="[A-Za-z0-9_.?#]{3,}" invalidMessage="无效的网址" promptMessage="请输入个人网址">
+								<input type="text" maxlength="50" dojoType="dijit.form.ValidationTextBox" trim=true id="website" name="website" regExp="[A-Za-z0-9_.?#/:]{3,}" invalidMessage="无效的网址" promptMessage="请输入个人网址">
 							</td>
 						</tr>
 						<tr>
@@ -200,7 +206,6 @@
 					<hr>					
                     <a href="#" class="button large orange" id="submit" onclick="checkSubmit()">注册</a>
                     <a href="index.php" class="button large orange">返回</a>
-                    <input type="hidden" id="registerDate" name="registerDate" />
 				</form>
             </div>				
         </div>

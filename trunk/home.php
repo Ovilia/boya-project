@@ -4,7 +4,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>BoYa</title>
         <?php
+        session_start();
         require_once('isLogin.php');
+        require_once('function.php');
         if (!isLogin()) {
             header("location:index.php");
         }
@@ -56,21 +58,20 @@
                          style="float: left; padding: 0 10px 10px 0; float: left;"/>
                     <a href="#">
                         <?php
-                        session_start();
                         echo $_SESSION['user_name'];
                         ?>
                     </a>
                     <hr style="margin:2px">
                     <div id="website">
-                        <a href="http://blog.sina.com.cn/plainjane001" title="访问ta的个人网站">
-                            http://blog.sina.com.cn/plainjane001
+                        <a href="<?php echo getWebsite($_SESSION['U_ID']); ?>" title="访问ta的个人网站">
+                            个人主页: <?php echo getWebsite($_SESSION['U_ID']); ?>
                         </a>
                     </div>
                 </div>
                 <div style="text-align: center;">
-					关注&nbsp;<a href="#">12</a>&nbsp;|&nbsp;
-					粉丝&nbsp;<a href="#">32</a>&nbsp;|&nbsp;
-					回答&nbsp;<a href="#">41</a>&nbsp;
+					关注&nbsp;<a href="#"><?php echo getFollowingAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
+					粉丝&nbsp;<a href="#"><?php echo getFollowerAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
+					回答&nbsp;<a href="#"><?php echo getAnsweredAmt($_SESSION['U_ID']);?></a>&nbsp;
                 </div>
                 <hr>
                 <h3>最相似的人</h3>
