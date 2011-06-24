@@ -1,7 +1,10 @@
 <?php
-	$db = new mysqli("127.0.0.1", "root", "tecton", "BOYA");
-	if (mysqli_connect_errno()){
-		echo "Error: Could not connect to database. Please try again.";
-		exit;
+
+	$db = mysql_connect("127.0.0.1:3306:/var/lib/mysql/mysql.sock", "root", "ovilia");
+	if (!$db){
+		    die('Connect Error: '. mysql_error());
+	} else {
+		mysql_select_db('BoYa');
 	}
+
 ?>

@@ -6,15 +6,110 @@
 		
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/buttons.css">		
+        
+		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
+		<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
+		
 		<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
 		<link rel="stylesheet" type="text/css" href="js/dijit/themes/claro/claro.css">
+		
+		<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+		<!--<script type="text/javascript" src="js/time_picker.js"></script>-->
+		<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
+		
 		<script type="text/javascript" src="js/dojo/dojo.js" djConfig="parseOnLoad:true"></script>
 		<script type="text/javascript">
             dojo.require("dijit.form.CheckBox");
+            dojo.require("dijit.form.DateTextBox");
             dojo.require("dijit.form.Form");
             dojo.require("dijit.form.Button");
             dojo.require("dijit.form.ValidationTextBox");
         </script>
+        
+        <script type="text/javascript">
+                $('document').ready(function(){
+                    $('#birthday').datepicker({
+                        dateFormat: 'yy-m-d',
+                        maxDate: new Date()
+                    });
+                    
+                    $(function() {
+						$("#radio").buttonset();
+					});					
+					
+					$(function() {
+						$("#submit").buttonCaptcha({
+							codeWord:'boya',
+							codeZone:'php'
+						});
+					});
+                });
+                
+                function checkSubmit(){
+					if(dijit.byId("username") == null || dijit.byId("username") == ""){
+						alert("用户名不能为空");
+						return false;
+					}
+					var email = document.getElementById("email").value;
+                    var password = document.getElementById("password").value;
+                    var repassword = document.getElementById("repassword").value;                    
+                    var username = document.getElementById("username").value;
+                    var male = document.getElementById("male").value;
+                    var birthday = document.getElementById("birthday").value;
+                    var website = document.getElementById("website").value;
+                    
+                    if (email == '' || password == '' || repassword == '' ||
+						username == ''){
+                        alert('请填写*部分');
+                        return false;
+                    }else{
+						if (!checkLength(email, "email", 4, 64)||
+							!checkLength(password, "password", 4, 32)||
+							!checkLength(repassword, "retype password", 4, 32)||
+							!checkLength(username, "username", 4, 32)){
+								return false;
+						}							
+						
+						//email
+						var email_patt = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+						if (!email_patt.test(email)){
+							alert("Illegal email!");
+							return false;
+						}
+												
+						//username
+						var name_patt = new RegExp("[^0-9a-zA-Z_]");
+						if (name_patt.test(username)){
+							alert("Illegal username!");
+							return false;
+						}
+						
+						//password
+						if (password != repassword){
+							alert("This password doesn't match the confirmation password.");
+							return false;
+						}
+						var pw_patt = new RegExp("[^0-9a-zA-Z_]");
+						if (pw_patt.test(password)){
+							alert("Illegal password!");
+							return false;
+						}
+						
+						var d = new Date();
+						document.getElementById("registerDate").value = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+						document.forms["registerForm"].submit();
+					}
+				}				
+				
+                function checkLength(obj, msg, min, max){
+					if(obj.length < min || obj.length > max){
+						alert("Illegal length of " + msg + "!");
+						return false;
+					}
+					return true;
+				}
+            </script>
     </head>
 	
     <body class="claro" style="font-size:15px; font-family: '微软雅黑';">
@@ -37,15 +132,15 @@
 					注册 - 伯牙网
 				</h2>
 				<hr>
-				<form id="registForm">
+				<form id="registerForm" action="registerValid.php" method="get">
 					<table>
 						<tr>
 							<td style="text-align:right;" width="120px;">
-								<label for="user_name">用户名:</label>
+								<label for="username">用户名:</label>
 							</td><td>
 								<span class="required_mark">(*)</span>
 							</td><td>
-								<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" trim=true id="user_name" name="user_name" required="true" regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" promptMessage="用户名至少为5-16个字符的英文字母或是数字">
+								<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" trim=true id="username" name="username" required="true" regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" promptMessage="用户名至少为5-16个字符的英文字母或是数字">
 							</td>
 						</tr>
 						<tr>
@@ -59,11 +154,11 @@
 						</tr>
 						<tr>
 							<td style="text-align:right;" width="120px;">
-								<label for="password_dup">重复密码:</label>
+								<label for="repassword">重复密码:</label>
 							</td><td>
 								<span class="required_mark">(*)</span>
 							</td><td>						
-								<input maxlength="20" type="password" dojoType="dijit.form.ValidationTextBox"  id="password_dup" name="password_dup" required=true invalidMessage="无效的密码">
+								<input maxlength="20" type="password" dojoType="dijit.form.ValidationTextBox"  id="repassword" name="repassword" required=true invalidMessage="无效的密码">
 							</td>
 						</tr>
 						<tr>
@@ -77,10 +172,11 @@
 						</tr>
 						<tr>
 							<td style="text-align:right;" width="120px;">
-								<label for="age">年龄:</label>
+								<label for="age">生日:</label>
 							</td><td>
-							</td><td>
-								<input type="text" maxlength="3" dojoType="dijit.form.ValidationTextBox" trim=true id="age" name="age" regExp="[0-9]{1,3}" invalidMessage="无效的年龄" promptMessage="请输入年龄">
+							</td><td>								
+								<input type="text"  name="birthday" id="birthday"
+                                       dojoType="dijit.form.DateTextBox">
 							</td>
 						</tr>
 						<tr>
@@ -96,14 +192,15 @@
 								<label for="gender">性别:</label>
 							</td><td>
 							</td><td>
-								<input name="gender" id="male" dojoType="dijit.form.RadioButton" value="0">男</input>
-								<input name="gender" id="female" dojoType="dijit.form.RadioButton"value="1">女</input>
+								<input name="gender" id="male" dojoType="dijit.form.RadioButton" value="1">男</input>
+								<input name="gender" id="female" dojoType="dijit.form.RadioButton"value="0">女</input>
 							</td>
 						</tr>
 					</table>
-					<hr>
-					<button type="button" dojoType="dijit.form.Button" onclick="validate_and_submit()">确认</button>
-					<button type="reset" dojoType="dijit.form.Button">重置</button>
+					<hr>					
+                    <a href="#" class="button large orange" id="submit" onclick="checkSubmit()">注册</a>
+                    <a href="index.php" class="button large orange">返回</a>
+                    <input type="hidden" id="registerDate" name="registerDate" />
 				</form>
             </div>				
         </div>

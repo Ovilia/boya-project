@@ -6,17 +6,7 @@
 
             <link rel="stylesheet" type="text/css" href="css/common.css">
                 <link rel="stylesheet" type="text/css" href="css/buttons.css">
-                    <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
-
-                    <!--
-                    <script type="text/javascript">
-			var browser=navigator.appName;
-			if (browser == 'Microsoft Internet Explorer')
-			{
-				//window.navigate("browser.php");
-			}
-		</script>-->
-
+                    <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
                     <script type="text/javascript">
                         $(document).ready(function(){
                             $("#left").mouseenter(function(){
@@ -45,14 +35,14 @@
                                             <td>
                                                 <text for="email">邮箱</text>
                                             </td><td>
-                                                <input id="email" name="email"></input>
+                                                <input id="email" name="email" size="15"></input>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <text for="password">密码</text>
                                             </td><td>
-                                                <input type="password" id="password" name="password"></password>
+                                                <input type="password" id="password" name="password" size="15"></password>
                                             </td>
                                         </tr>
                                     </table>
@@ -66,7 +56,7 @@
                                     </table>
                                 </form>
                             </div>
-                            <div id="right" style="font-size:20px; text-align: center;">
+                            <div id="right" style="font-size:20px; text-align: center; color: #333;">
                                 <img src="images/back.jpg" />
 				高山流水遇知音<br>
 				在这里，与你的子期不期而遇<br>
