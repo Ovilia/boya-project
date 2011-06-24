@@ -14,6 +14,11 @@
  */
 function loadImage($email, $s = 60, $d = 'identicon', $r = 'g', $img = false, $atts = array()) {
     $url = 'http://www.gravatar.com/avatar/';
+    
+    if (getNetworkStatus($url)){
+		return "images/user.jpeg";
+	}
+	
     $url .= md5(strtolower(trim($email)));
     $url .= "?s=$s&d=$d&r=$r";
     if ($img) {
@@ -23,10 +28,18 @@ function loadImage($email, $s = 60, $d = 'identicon', $r = 'g', $img = false, $a
         $url .= ' />';
     }
     
+    
     //if gravatar isn't available, use this image...
+    /*
     if (!$size = getimagesize($url))
         $url = "images/user.jpeg";
-    
+    */
     return $url;
+}
+
+function getNetworkStatus($url) {	
+	ini_set('default_socket_timeout', 7); 
+	$a = file_get_contents($url,FALSE,NULL,0,20); 
+	return ( ($a!= "") && ($http_response_header!= "") ); 
 }
 ?>

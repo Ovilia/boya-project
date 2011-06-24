@@ -11,18 +11,27 @@
         ?>
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/buttons.css">
-        <script type="text/javascript" src="js/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
 
         <script type="text/javascript">
             var questionList = new Array("你喜欢动物吗？","你喜欢看电影吗？","你喜欢听音乐吗？");
             var curQuestion = 0;
             function loadQuestion(index){     
                 $("#questionPanel").text(questionList[index]);
-            };
-            $(".command").mouseup(function(){
-                curQuestion++;
-                loadQuestion(curQuestion);
-            });
+            };            
+            
+            $(document).ready(function(){
+				$(".command").mouseup(function(){
+					curQuestion++;
+					loadQuestion(curQuestion);
+				});
+				
+				$("#closeSheet").click(function(){
+					$("#sheet").slideUp(500);
+					$("#question").slideUp(500);
+				});
+			});
+            
         </script>
     </head>
     <body onload="loadQuestion(0);">
@@ -58,34 +67,44 @@
                         </a>
                     </div>
                 </div>
-                关注&nbsp;<a href="#">12</a>&nbsp;|&nbsp;
-                粉丝&nbsp;<a href="#">32</a>&nbsp;|&nbsp;
-                回答&nbsp;<a href="#">41</a>&nbsp;
+                <div style="text-align: center;">
+					关注&nbsp;<a href="#">12</a>&nbsp;|&nbsp;
+					粉丝&nbsp;<a href="#">32</a>&nbsp;|&nbsp;
+					回答&nbsp;<a href="#">41</a>&nbsp;
+                </div>
                 <hr>
                 <h3>最相似的人</h3>
                 <div class="userImg">
-                    <img src="<?php echo loadImage('hfdusifh'); ?>"
+                    <img src="<?php echo loadImage('hfdusifh'); ?>" height=50px
                          style="float: left; padding: 0 10px 10px 0; float: left;"/>
                     <a href="#">djias</a><br>
 					相似度&nbsp;98%<br>
 					准确性&nbsp;60%
                 </div>
 				<div class="userImg">
-                    <img src="<?php echo loadImage('dhauodjs'); ?>"
+                    <img src="<?php echo loadImage('dhauodjs'); ?>" height=50px
                          style="float: left; padding: 0 10px 10px 0; float: left;"/>
                     <a href="#">frnja</a><br>
 					相似度&nbsp;95%<br>
 					准确性&nbsp;30%
                 </div>
 				<div class="userImg">
-                    <img src="<?php echo loadImage('hduaio'); ?>"
+                    <img src="<?php echo loadImage('hduaio'); ?>" height=50px
                          style="float: left; padding: 0 10px 10px 0; float: left;"/>
                     <a href="#">djaiu</a><br>
 					相似度&nbsp;90%<br>
 					准确性&nbsp;10%
                 </div>
             </div>
+            
+            
             <div id="right">
+				<div id="sheet">
+					<h3 style="float: left;">答题卡</h3>
+					<div id="closeSheet" style="float: right; margin: 5px;">
+						<a href="#" style="color: #333; text-shadow: 1px 1px #fff">X</a>
+					</div>
+				</div>
                 <div id="question">
                     <div id="questionPanel"></div>
                     <div id="commandPanel">
@@ -94,7 +113,14 @@
                         <a href="#" class="button small orange">跳过</a>
                     </div>
                 </div>
-               这里有些<a href="#">文字</a>
+               <a href="#">fhdsui</a>回答了问题: 你喜欢动物吗？
+               <div style="text-align: right">
+					<a href="#" class="button small orange">我也回答</a>
+               </div>
+               <div class="time">
+				   2011-4-23 23:22
+               </div>
+               <hr>
             </div>
         </div>
         <div id="footer">
