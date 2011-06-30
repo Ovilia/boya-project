@@ -25,7 +25,7 @@ create table Answer
 (
    U_ID                 char(10) not null,
    Q_ID                 char(10) not null,
-   answer_time          datetime not null default CURRENT_TIMESTAMP,
+   answer_time          timestamp not null default CURRENT_TIMESTAMP,
    answer               bool not null,
    primary key (U_ID, Q_ID)
 );
@@ -54,7 +54,7 @@ create table Follow
 (
    U_ID                 char(10) not null,
    Use_U_ID             char(10) not null,
-   follow_time          datetime not null,
+   follow_time          timestamp not null,
    hasRead              bool not null,
    primary key (U_ID, Use_U_ID)
 );
@@ -66,7 +66,7 @@ create table Operate
 (
    Q_ID                 char(10) not null,
    U_ID                 char(10) not null,
-   operate_time         datetime not null,
+   operate_time         timestamp not null,
    operate_type         char(1) not null,
    primary key (Q_ID, U_ID)
 );
@@ -78,7 +78,7 @@ create table Own
 (
    U_ID                 char(10) not null,
    authority_name       char(32) not null,
-   modify_time          datetime not null default CURRENT_TIMESTAMP,
+   modify_time          timestamp not null default CURRENT_TIMESTAMP,
    primary key (U_ID, authority_name)
 );
 
@@ -87,7 +87,7 @@ create table Own
 /*==============================================================*/
 create table Question
 (
-   Q_ID                 char(10) not null,
+   Q_ID                 char(10) not null auto_increment,
    Que_Q_ID             char(10),
    content              varchar(200) not null,
    Q_span               char(1),
@@ -99,7 +99,7 @@ create table Question
 /*==============================================================*/
 create table User
 (
-   U_ID                 char(10) not null,
+   U_ID                 char(10) not null auto_increment,
    user_name            varchar(16) not null,
    user_pw              varchar(16) not null,
    email                varchar(32) not null,
