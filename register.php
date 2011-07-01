@@ -7,19 +7,18 @@
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/buttons.css">		
         
-		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
-		<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
-		
-		<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
-		<link rel="stylesheet" type="text/css" href="js/dijit/themes/claro/claro.css">
-		
-		<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
-		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
-		<!--<script type="text/javascript" src="js/time_picker.js"></script>-->
-		<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
-		
-		<script type="text/javascript" src="js/dojo/dojo.js" djConfig="parseOnLoad:true"></script>
-		<script type="text/javascript">
+	<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
+	<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
+	
+	<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
+	<link rel="stylesheet" type="text/css" href="js/dijit/themes/claro/claro.css">
+	
+	<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+	<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
+	
+	<script type="text/javascript" src="js/dojo/dojo.js" djConfig="parseOnLoad:true"></script>
+	<script type="text/javascript">
             dojo.require("dijit.form.CheckBox");
             dojo.require("dijit.form.DateTextBox");
             dojo.require("dijit.form.Form");
