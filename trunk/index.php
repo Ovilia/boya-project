@@ -49,8 +49,8 @@
                                     <table style="text-align:center; width:100%;">
                                         <tr>
                                             <td>
-                                                <button type="submit">登录</button>
-                                                <input type="button" onclick="window.location='register.php'" value="注册"/>
+						<a class="button small gray" href="#" onclick="document.forms['loginForm'].submit()">登录</a>
+                                                <a class="button small gray" href="#" onclick="window.location='register.php'">注册</a>
                                             </td>
                                         </tr>
                                     </table>

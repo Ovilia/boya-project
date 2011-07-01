@@ -68,7 +68,7 @@ function getAnsweredAmt($U_ID){
 }
 
 function isFollowed($followerID, $followingID){
-	$query = sprintf("SELECT COUNT(*) as amt FROM Follow WHERE follower_ID = '%s' and following_ID = '%s' LIMIT 1",
+	$query = sprintf("SELECT * FROM Follow WHERE follower_ID = '%s' and following_ID = '%s' LIMIT 1",
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	$row = mysql_fetch_assoc($result);
@@ -80,8 +80,8 @@ function isFollowed($followerID, $followingID){
 }
 
 function setFollow($followerID, $followingID){
-	$query = sprintf("INSERT INTO Follow VALUES '%s', '%s', default, false",
-					 $followID, $followingID);
+	$query = sprintf("INSERT INTO Follow VALUES ('%s', '%s', default, false)",
+					 $followerID, $followingID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		echo "<script language=\"JavaScript\">alert(\"Followed Successfully!\");window.history.back(); </script>";
@@ -97,8 +97,7 @@ function setUnfollow($followerID, $followingID){
 	if (mysql_affected_rows() > 0) {
 		echo "<script language=\"JavaScript\">alert(\"Unfollowed Successfully!\");window.history.back(); </script>";
 	} else {
-		echo $query;
-		//echo "<script language=\"JavaScript\">alert(\"Failed to unfollow!\");window.history.back(); </script>";
+		echo "<script language=\"JavaScript\">alert(\"Failed to unfollow!\");window.history.back(); </script>";
 	}
 }
 
