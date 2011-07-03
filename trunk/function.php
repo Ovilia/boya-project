@@ -15,6 +15,9 @@ function getUsername($U_ID){
 function getEmail($U_ID){	
 	$query = sprintf("SELECT email FROM User WHERE U_ID = '%s' LIMIT 1", $U_ID);
 	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['email'];
@@ -75,8 +78,47 @@ function getSimilarity($U_ID1, $U_ID2){
 	if ($row != null) {
 		return $row['similarity'];
 	}else{
-		return '0';
+		return 0;
 	}
+}
+
+function getIntersetQuesAmt($U_ID1, $U_ID2){
+	$query = sprintf("SELECT getIntersetQuesAmt(%s, %s) as amt", $U_ID1, $U_ID2);
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return $row['amt'];
+	}else{
+		return 0;
+	}
+}
+
+function getUnionQuesAmt($U_ID1, $U_ID2){
+	$query = sprintf("SELECT getUnionQuesAmt(%s, %s) as amt", $U_ID1, $U_ID2);
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return $row['amt'];
+	}else{
+		return 0;
+	}
+}
+
+function getReliability($U_ID1, $U_ID2){
+	
+}
+
+function getMostSimilar($U_ID, $offset, $size){
+	$query = sprintf("CALL getMostSimilar(%s, %s, %s)",
+				$U_ID, $offset, $size);
+	$result = mysql_query($query);
+	$ans = array();
+	$len = 0;
+	while($row = mysql_fetch_assoc($result)){
+		$ans[$len] = $row;
+		$len++;
+	}
+	return $ans;
 }
 
 function isFollowed($followerID, $followingID){
@@ -96,9 +138,9 @@ function setFollow($followerID, $followingID){
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
-		echo "<script language=\"JavaScript\">alert(\"Followed Successfully!\");window.history.back(); </script>";
+		return true;
 	} else {
-		echo "<script language=\"JavaScript\">alert(\"Failed to follow!\");window.history.back(); </script>";
+		return false;
 	}
 }
 
@@ -107,9 +149,9 @@ function setUnfollow($followerID, $followingID){
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
-		echo "<script language=\"JavaScript\">alert(\"Unfollowed Successfully!\");window.history.back(); </script>";
+		return true;
 	} else {
-		echo "<script language=\"JavaScript\">alert(\"Failed to unfollow!\");window.history.back(); </script>";
+		return false;
 	}
 }
 
@@ -151,9 +193,9 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 	if (mysql_affected_rows() > 0) {
 		return true;
 	} else {
-		return $query;
 		return false;
 	}	
 }
-
+$s = getMostSimilar(1,0,10);
+echo getEmail($s[0]['U_ID']);
 ?>

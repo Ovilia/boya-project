@@ -14,10 +14,6 @@
  */
 function loadImage($email, $s = 60, $d = 'identicon', $r = 'g', $img = false, $atts = array()) {
     $url = 'http://www.gravatar.com/avatar/';
-    
-    if (getNetworkStatus($url)){
-		return "images/user.jpeg";
-	}
 	
     $url .= md5(strtolower(trim($email)));
     $url .= "?s=$s&d=$d&r=$r";
@@ -42,4 +38,5 @@ function getNetworkStatus($url) {
 	$a = file_get_contents($url,FALSE,NULL,0,20); 
 	return ( ($a!= "") && ($http_response_header!= "") ); 
 }
+
 ?>
