@@ -71,7 +71,7 @@
 						}							
 						
 						//email
-						var email_patt = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+						var email_patt = /^([a-zA-Z0-9_.])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
 						if (!email_patt.test(email)){
 							alert("Illegal email!");
 							return false;
