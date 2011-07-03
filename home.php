@@ -4,6 +4,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>BoYa</title>
         <?php
+        require_once('PhpConsole.php');
+		PhpConsole::start(true, true, dirname(__FILE__));
+		
         session_start();
         require_once('isLogin.php');
         require_once('function.php');
@@ -40,7 +43,6 @@
         <div id="top">
             <?php
             require_once("loadImage.php");
-            session_start();
             $imageUrl = loadImage($_SESSION['email']);
             ?>
             <img src="images/title.png" height=45px style="float: left; margin-left: 30px; margin-right: 30px;"/>
@@ -75,29 +77,21 @@
                 </div>
                 <hr>
                 <h3>最相似的人</h3>
-                <div class="userImg">
-                    <img src="<?php echo loadImage('hfdusifh'); ?>" height=50px
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
-                    <a href="#">djias</a><br>
-					相似度&nbsp;98%<br>
-					准确性&nbsp;60%
-                </div>
-				<div class="userImg">
-                    <img src="<?php echo loadImage('dhauodjs'); ?>" height=50px
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
-                    <a href="#">frnja</a><br>
-					相似度&nbsp;95%<br>
-					准确性&nbsp;30%
-                </div>
-				<div class="userImg">
-                    <img src="<?php echo loadImage('hduaio'); ?>" height=50px
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
-                    <a href="#">djaiu</a><br>
-					相似度&nbsp;90%<br>
-					准确性&nbsp;10%
-                </div>
-            </div>
-            
+                <?php
+                $mostSimilar = getMostSimilar($_SESSION['U_ID'], 0, 3);
+                for ($i = 0; $i < 3; ++$i){
+					if (!isset($mostSimilar[$i]))
+						break;
+					echo '<div class="userImg"><img src="'.
+						 loadImage(getEmail($mostSimilar[$i]['U_ID'])).
+						 '" height=50px style="float: left; padding: 0 10px 10px 0; float: left;"/>'.
+						 '<a href="javascript:;">'.getUsername($mostSimilar[0]['U_ID']).'</a><br>'.
+						 '相似度&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
+						 '准确性&nbsp;'.number_format(
+								getIntersetQuesAmt($_SESSION['U_ID'], 
+									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
+				}
+                ?>
             
             <div id="right">
 				<div id="sheet">
