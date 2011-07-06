@@ -1,7 +1,5 @@
-#!/usr/bin/env php
 <?php
 require_once('connect.php');
-echo $db;
 
 function getUsername($U_ID){	
 	$query = sprintf("SELECT user_name FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
@@ -128,24 +126,36 @@ function getUnionQuesAmt($U_ID1, $U_ID2){
 }
 
 function getReliability($U_ID1, $U_ID2){
-	
+	return getIntersetQuesAmt($U_ID1, $U_ID2) / getUnionQuesAmt($U_ID1, $U_ID2);
 }
 
 function getMostSimilar($U_ID, $offset, $size){
+	$link = mysqli_connect("localhost", "root", "ovilia", "BoYa");
+	/* check connection */
+	if (mysqli_connect_errno()) {
+		printf("Connect failed: %s", mysqli_connect_error());
+		exit();
+	}
 	$query = sprintf("CALL getMostSimilar(%s, %s, %s)",
 				$U_ID, $offset, $size);
-	$result = mysql_query($query);
-	print mysql_error();
-	if (!$result){
-		return $query;
-	}
-	$ans = array();
 	$len = 0;
-	while($row = mysql_fetch_assoc($result)){
-		$ans[$len] = $row;
-		$len++;
+	$ans = Array();
+	if(mysqli_multi_query($link, $query)){
+		do{
+			if($result = mysqli_store_result($link)){
+				while($row = mysqli_fetch_row($result)){
+					$ans[$len]['U_ID'] = $row[0];
+					$ans[$len]['similar'] = $row[1];
+					$len++;
+				}
+				mysqli_free_result($result);
+			}
+			if (!mysqli_more_results($link)){
+				break;
+			}
+		}while (mysqli_next_result($link));
 	}
-	mysql_free_result($result);
+	mysqli_close($link);
 	return $ans;
 }
 
