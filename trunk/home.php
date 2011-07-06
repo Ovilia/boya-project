@@ -4,8 +4,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>BoYa</title>
         <?php
-        //require_once('PhpConsole.php');
-		//PhpConsole::start(true, true, dirname(__FILE__));
+        require_once('PhpConsole.php');
+		PhpConsole::start(true, true, dirname(__FILE__));
 		
         session_start();
         require_once('isLogin.php');
@@ -81,28 +81,22 @@
                 <?php
                 $mostSimilar = getMostSimilar($_SESSION['U_ID'], 0, 3);
                 
-                //print_r($mostSimilar);//This is ok
-                //Note!!! Everything goes wrong here, whatever to query
-				$name = getUsername(2);
-				echo '<script type="text/javascript">alert("'.$name.'")</script>';
-                /*for ($i = 0; $i < 3; ++$i){
-					if (!isset($mostSimilar[$i])){
+                for ($i = 0; $i < 3; ++$i){
+					if (!isset($mostSimilar[$i]) || $mostSimilar[$i]['similar'] == 0){
 						break;
 					}
-					$name = getUsername('3');//$mostSimilar[$i]['U_ID'];
-					echo $name;
-					/*echo '<div class="userImg"><img src="'.
+					echo '<div class="userImg"><img src="'.
 						 loadImage(getEmail($mostSimilar[$i]['U_ID'])).
 						 '" height=50px style="float: left; padding: 0 10px 10px 0; float: left;"/>'.
-						 '<a href="javascript:;">'.getUsername($mostSimilar[0]['U_ID']).'</a><br>'.
+						 '<a href="javascript:;">'.getUsername($mostSimilar[$i]['U_ID']).'</a><br>'.
 						 '相似度&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
 						 '准确性&nbsp;'.number_format(
-								getIntersetQuesAmt($_SESSION['U_ID'], 
+								getReliability($_SESSION['U_ID'], 
 									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
 									
-				}*/
+				}
                 ?>
-            
+            </div>
             <div id="right">
 				<div id="sheet">
 					<h3 style="float: left;">答题卡</h3>
