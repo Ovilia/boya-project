@@ -4,8 +4,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>BoYa</title>
         <?php
-        require_once('PhpConsole.php');
-		PhpConsole::start(true, true, dirname(__FILE__));
+        //require_once('PhpConsole.php');
+		//PhpConsole::start(true, true, dirname(__FILE__));
 		
         session_start();
         require_once('isLogin.php');
@@ -77,12 +77,21 @@
                 </div>
                 <hr>
                 <h3>最相似的人</h3>
+                
                 <?php
                 $mostSimilar = getMostSimilar($_SESSION['U_ID'], 0, 3);
-                for ($i = 0; $i < 3; ++$i){
-					if (!isset($mostSimilar[$i]))
+                
+                //print_r($mostSimilar);//This is ok
+                //Note!!! Everything goes wrong here, whatever to query
+				$name = getUsername(2);
+				echo '<script type="text/javascript">alert("'.$name.'")</script>';
+                /*for ($i = 0; $i < 3; ++$i){
+					if (!isset($mostSimilar[$i])){
 						break;
-					echo '<div class="userImg"><img src="'.
+					}
+					$name = getUsername('3');//$mostSimilar[$i]['U_ID'];
+					echo $name;
+					/*echo '<div class="userImg"><img src="'.
 						 loadImage(getEmail($mostSimilar[$i]['U_ID'])).
 						 '" height=50px style="float: left; padding: 0 10px 10px 0; float: left;"/>'.
 						 '<a href="javascript:;">'.getUsername($mostSimilar[0]['U_ID']).'</a><br>'.
@@ -90,7 +99,8 @@
 						 '准确性&nbsp;'.number_format(
 								getIntersetQuesAmt($_SESSION['U_ID'], 
 									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
-				}
+									
+				}*/
                 ?>
             
             <div id="right">
