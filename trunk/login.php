@@ -13,7 +13,6 @@ if(!isset($email) || !isset($password) || $email == '' || $password == ''){
 }
 
 require_once('connect.php');
-connect();
 $query = sprintf("SELECT U_ID, user_name FROM User WHERE email = '%s' AND user_pw = '%s' LIMIT 1",
 				 mysql_real_escape_string($email), mysql_real_escape_string($password));
 	

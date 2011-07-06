@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 require_once('connect.php');
-connect();
+echo $db;
 
 function getUsername($U_ID){	
 	$query = sprintf("SELECT user_name FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
