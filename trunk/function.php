@@ -1,9 +1,14 @@
+#!/usr/bin/env php
 <?php
 require_once('connect.php');
+connect();
 
 function getUsername($U_ID){	
-	$query = sprintf("SELECT user_name FROM User WHERE U_ID = '%s' LIMIT 1", $U_ID);
+	$query = sprintf("SELECT user_name FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
 	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['user_name'];
@@ -13,10 +18,10 @@ function getUsername($U_ID){
 }
 
 function getEmail($U_ID){	
-	$query = sprintf("SELECT email FROM User WHERE U_ID = '%s' LIMIT 1", $U_ID);
+	$query = sprintf("SELECT email FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
 	$result = mysql_query($query);
 	if (!$result){
-		return $query;
+		return mysql_error();
 	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
@@ -27,8 +32,11 @@ function getEmail($U_ID){
 }
 
 function getWebsite($U_ID){
-	$query = sprintf("SELECT website FROM User WHERE U_ID = '%s' LIMIT 1", $U_ID);
+	$query = sprintf("SELECT website FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
 	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['website'];
@@ -38,8 +46,11 @@ function getWebsite($U_ID){
 }
 
 function getFollowerAmt($U_ID){
-	$query = sprintf("SELECT COUNT(*) as amt FROM Follow WHERE following_ID = '%s'", $U_ID);
+	$query = sprintf("SELECT COUNT(*) as amt FROM Follow WHERE following_ID = %s", $U_ID);
 	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['amt'];
@@ -49,8 +60,11 @@ function getFollowerAmt($U_ID){
 }
 
 function getFollowingAmt($U_ID){
-	$query = sprintf("SELECT COUNT(*) as amt FROM Follow WHERE follower_ID = '%s'", $U_ID);
+	$query = sprintf("SELECT COUNT(*) as amt FROM Follow WHERE follower_ID = %s", $U_ID);
 	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['amt'];
@@ -60,8 +74,11 @@ function getFollowingAmt($U_ID){
 }
 
 function getAnsweredAmt($U_ID){
-	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE U_ID = '%s'", $U_ID);
+	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE U_ID = %s", $U_ID);
 	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['amt'];
@@ -74,6 +91,9 @@ function getSimilarity($U_ID1, $U_ID2){
 	$query = sprintf("SELECT similarity from Similar WHERE (U_ID1 = %s AND U_ID2 = %s) OR (U_ID1 = %s AND U_ID2 = %s) ORDER BY update_time DESC LIMIT 1",
 			$U_ID1, $U_ID2, $U_ID2, $U_ID1);
 	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['similarity'];
@@ -85,6 +105,9 @@ function getSimilarity($U_ID1, $U_ID2){
 function getIntersetQuesAmt($U_ID1, $U_ID2){
 	$query = sprintf("SELECT getIntersetQuesAmt(%s, %s) as amt", $U_ID1, $U_ID2);
 	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
 		return $row['amt'];
@@ -112,17 +135,22 @@ function getMostSimilar($U_ID, $offset, $size){
 	$query = sprintf("CALL getMostSimilar(%s, %s, %s)",
 				$U_ID, $offset, $size);
 	$result = mysql_query($query);
+	print mysql_error();
+	if (!$result){
+		return $query;
+	}
 	$ans = array();
 	$len = 0;
 	while($row = mysql_fetch_assoc($result)){
 		$ans[$len] = $row;
 		$len++;
 	}
+	mysql_free_result($result);
 	return $ans;
 }
 
 function isFollowed($followerID, $followingID){
-	$query = sprintf("SELECT * FROM Follow WHERE follower_ID = '%s' and following_ID = '%s' LIMIT 1",
+	$query = sprintf("SELECT * FROM Follow WHERE follower_ID = %s and following_ID = %s LIMIT 1",
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	$row = mysql_fetch_assoc($result);
@@ -134,7 +162,7 @@ function isFollowed($followerID, $followingID){
 }
 
 function setFollow($followerID, $followingID){
-	$query = sprintf("INSERT INTO Follow VALUES ('%s', '%s', default, false)",
+	$query = sprintf("INSERT INTO Follow VALUES (%s, %s, default, false)",
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
@@ -145,7 +173,7 @@ function setFollow($followerID, $followingID){
 }
 
 function setUnfollow($followerID, $followingID){
-	$query = sprintf("DELETE FROM Follow WHERE follower_ID = '%s' AND following_ID = '%s' LIMIT 1",
+	$query = sprintf("DELETE FROM Follow WHERE follower_ID = %s AND following_ID = %s LIMIT 1",
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
@@ -196,6 +224,5 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 		return false;
 	}	
 }
-$s = getMostSimilar(1,0,10);
-echo getEmail($s[0]['U_ID']);
+
 ?>
