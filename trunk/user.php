@@ -11,6 +11,7 @@
             header("location:index.php");
         }
         $U_ID = $_GET['U_ID'];
+        //check if user exists
         if (getEmail($U_ID) == ''){
 			header("location:home.php");
 		}

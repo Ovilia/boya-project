@@ -193,7 +193,7 @@ function setUnfollow($followerID, $followingID){
 	}
 }
 
-function insertUser($username, $password, $email, $male, $birthday, $website){
+function insertUser($username, $password, $email, $male='', $birthday='', $website=''){
 	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s')",  
 				 mysql_real_escape_string($username), 
 				 mysql_real_escape_string($password),
@@ -209,10 +209,8 @@ function insertUser($username, $password, $email, $male, $birthday, $website){
 	}
 }
 
-function insertQuestion($Q_ID, $father_Q_ID, $content){
-	$query = sprintf("INSERT INTO Question VALUES(%s, %s, '%s', null)",
-				mysql_real_escape_string($Q_ID), 
-				mysql_real_escape_string($father_Q_ID),
+function insertQuestion($content){
+	$query = sprintf("INSERT INTO Question VALUES(default, '%s', null)",
 				mysql_real_escape_string($content));
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
@@ -223,7 +221,7 @@ function insertQuestion($Q_ID, $father_Q_ID, $content){
 }
 
 function insertAnswer($U_ID, $Q_ID, $answer){
-	$query = sprintf("INSERT INTO Answer VALUES(%s, %s, default, %s)",
+	$query = sprintf("INSERT INTO Answer VALUES(%s, %s, default, '%s')",
 				mysql_real_escape_string($U_ID), 
 				mysql_real_escape_string($Q_ID),
 				mysql_real_escape_string($answer));
@@ -243,13 +241,15 @@ function getRecentAnswers($U_ID, $limit){
 				mysql_real_escape_string($limit));
 	$result = mysql_query($query);
 	while ($row = mysql_fetch_assoc($result)) {
-		$contentQuery = sprintf("SELECT content FROM Question WHERE Q_ID = %d LIMIT 1",
-							mysql_real_escape_string($row['Q_ID']));
-		$contentResult = mysql_query($contentQuery);
-		$content = mysql_fetch_assoc($contentResult);
-		$ans[$len]['answer_time'] = $row['answer_time'];
-		$ans[$len]['content'] = $content['content'];
-		$len++;
+		if ($row['Q_ID'] != '' && $row['Q_ID'] != null){
+			$contentQuery = sprintf("SELECT content FROM Question WHERE Q_ID = %d LIMIT 1",
+								mysql_real_escape_string($row['Q_ID']));
+			$contentResult = mysql_query($contentQuery);
+			$content = mysql_fetch_assoc($contentResult);
+			$ans[$len]['answer_time'] = $row['answer_time'];
+			$ans[$len]['content'] = $content['content'];
+			$len++;
+		}
 	}
 	return $ans;
 }
