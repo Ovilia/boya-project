@@ -19,23 +19,74 @@
         <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
 
         <script type="text/javascript">
-            var questionList = new Array("你喜欢动物吗？","你喜欢看电影吗？","你喜欢听音乐吗？");
-            var curQuestion = 0;
-            function loadQuestion(index){     
-                $("#questionPanel").text(questionList[index]);
-            };            
-            
             $(document).ready(function(){
-				$(".command").mouseup(function(){
-					curQuestion++;
-					loadQuestion(curQuestion);
-				});
+				curQuestion = 0;
+				loadQuestion(curQuestion);
 				
 				$("#closeSheet").click(function(){
 					$("#sheet").slideUp(500);
 					$("#question").slideUp(500);
 				});
 			});
+			
+            var questionList = new Array();
+            <?php
+            $questions = getRndQuestion($_SESSION['U_ID'], 10);
+            for ($i = 0; $i < count($questions); ++$i){
+				echo "questionList[".$i."] = new Array();";
+				echo "questionList[".$i."]['Q_ID'] = ".$questions[$i]['Q_ID'].";";
+				echo "questionList[".$i."]['content'] = '".$questions[$i]['content']."';";
+			}
+            ?>
+            var curQuestion = 0;
+            function loadQuestion(index){     
+                $("#questionPanel").text(questionList[index]['content']);
+            };
+            
+            function requestQuestion(){
+				$.ajax({
+					url: "requestQuestion.php",
+					async: true,
+					success: function(html){
+						content = html.substr(0, html.indexOf("^"));
+						Q_ID = html.substr(html.indexOf("^") + 1);
+						$("#questionPanel").text(content);
+					}
+				});
+			}
+			
+			function sendAnswer(Q_ID, answer){
+				$.ajax({
+					type: "POST",
+					url: "sendAnswer.php",
+					data: ("Q_ID=" + Q_ID + "&answer=" + answer),
+					success: function(msg){
+						//alert( "Data Saved: " + msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function answer(ans){
+				curQuestion++;
+				if (ans == 'y' || ans == 'n'){
+					if (curQuestion > questionList.length){
+						//alert("send: "+Q_ID+"; ans: "+ans);
+						sendAnswer(Q_ID, ans);
+					}else{
+						//alert("send: "+questionList[curQuestion - 1]['Q_ID']+"; ans: "+ans);
+						sendAnswer(questionList[curQuestion - 1]['Q_ID'], ans);
+					}
+				}
+				
+				if (curQuestion < questionList.length){
+					loadQuestion(curQuestion);
+				}else{
+					requestQuestion();
+				}
+			}
             
         </script>
     </head>
@@ -107,9 +158,9 @@
                 <div id="question">
                     <div id="questionPanel"></div>
                     <div id="commandPanel">
-                        <a href="#" class="button small orange">是</a>
-                        <a href="#" class="button small orange">否</a>
-                        <a href="#" class="button small orange">跳过</a>
+                        <a href="javascript:;" class="button small orange" onclick="answer('y')">是</a>
+                        <a href="javascript:;" class="button small orange" onclick="answer('n')">否</a>
+                        <a href="javascript:;" class="button small orange" onclick="answer('p')">跳过</a>
                     </div>
                 </div>
                 <?php 
