@@ -88,9 +88,9 @@
 					echo '<div class="userImg"><img src="'.
 						 loadImage(getEmail($mostSimilar[$i]['U_ID'])).
 						 '" height=50px style="float: left; padding: 0 10px 10px 0; float: left;"/>'.
-						 '<a href="javascript:;">'.getUsername($mostSimilar[$i]['U_ID']).'</a><br>'.
-						 '相似度&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
-						 '准确性&nbsp;'.number_format(
+						 '<a href="user.php?U_ID='.$mostSimilar[$i]['U_ID'].'">'.getUsername($mostSimilar[$i]['U_ID']).'</a><br>'.
+						 '相似度:&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
+						 '置信度:&nbsp;'.number_format(
 								getReliability($_SESSION['U_ID'], 
 									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
 									
@@ -112,14 +112,14 @@
                         <a href="#" class="button small orange">跳过</a>
                     </div>
                 </div>
-               <a href="#">fhdsui</a>回答了问题: 你喜欢动物吗？
-               <div style="text-align: right">
-					<a href="#" class="button small orange">我也回答</a>
-               </div>
-               <div class="time">
-				   2011-4-23 23:22
-               </div>
-               <hr>
+                <?php 
+                $recentAnswers = getRecentAnswers($_SESSION['U_ID'], 30);
+                for ($i = 0; $i < count($recentAnswers); ++$i){
+					echo "<a href=\"javascipt:;\">".$_SESSION['user_name'].
+					"</a>回答了问题: ".$recentAnswers[$i]['content'].
+					"<div style=\"text-align: right\"></div><div class=\"time\">".
+					$recentAnswers[$i]['answer_time']."</div><hr>";
+				}?>
             </div>
         </div>
         <div id="footer">

@@ -130,7 +130,7 @@ function getReliability($U_ID1, $U_ID2){
 }
 
 function getMostSimilar($U_ID, $offset, $size){
-	$link = mysqli_connect("localhost", "root", "ovilia", "BoYa");
+	$link = mysqli_connect("localhost", "root", "tecton", "BoYa");
 	/* check connection */
 	if (mysqli_connect_errno()) {
 		printf("Connect failed: %s", mysqli_connect_error());
@@ -233,6 +233,25 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 	} else {
 		return false;
 	}	
+}
+
+function getRecentAnswers($U_ID, $limit){
+	$len = 0;
+	$ans = Array();
+	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d ORDER BY answer_time DESC LIMIT %d",
+				mysql_real_escape_string($U_ID),
+				mysql_real_escape_string($limit));
+	$result = mysql_query($query);
+	while ($row = mysql_fetch_assoc($result)) {
+		$contentQuery = sprintf("SELECT content FROM Question WHERE Q_ID = %d LIMIT 1",
+							mysql_real_escape_string($row['Q_ID']));
+		$contentResult = mysql_query($contentQuery);
+		$content = mysql_fetch_assoc($contentResult);
+		$ans[$len]['answer_time'] = $row['answer_time'];
+		$ans[$len]['content'] = $content['content'];
+		$len++;
+	}
+	return $ans;
 }
 
 ?>

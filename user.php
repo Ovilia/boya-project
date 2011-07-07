@@ -78,6 +78,11 @@
 					回答&nbsp;<a href="#"><?php echo getAnsweredAmt($U_ID);?></a>&nbsp;
                 </div>
                 
+                <hr>
+				<h3>我 & ta</h3>
+				相似度: <?php echo number_format(getSimilarity($_SESSION['U_ID'], $U_ID) * 100, 2);?>%<br>
+				置信度: <?php echo number_format(getReliability($_SESSION['U_ID'], $U_ID) * 100, 2);?>%
+                
                 <div id="followPanel">
 					<?php
 					$isFollowed = isFollowed($_SESSION['U_ID'], $U_ID)
@@ -103,39 +108,38 @@
                 </div>
                 
                 <hr>
-                <h3>最相似的人</h3>
-                <div class="userImg">
-                    <img src="<?php echo loadImage('hfdusifh'); ?>" height=50px
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
-                    <a href="#">djias</a><br>
-					相似度&nbsp;98%<br>
-					准确性&nbsp;60%
-                </div>
-				<div class="userImg">
-                    <img src="<?php echo loadImage('dhauodjs'); ?>" height=50px
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
-                    <a href="#">frnja</a><br>
-					相似度&nbsp;95%<br>
-					准确性&nbsp;30%
-                </div>
-				<div class="userImg">
-                    <img src="<?php echo loadImage('hduaio'); ?>" height=50px
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
-                    <a href="#">djaiu</a><br>
-					相似度&nbsp;90%<br>
-					准确性&nbsp;10%
-                </div>
+                
+                <h3>和ta最相似的人</h3>
+               <?php
+                $mostSimilar = getMostSimilar($U_ID, 0, 3);
+                
+                for ($i = 0; $i < 2; ++$i){
+					if (!isset($mostSimilar[$i]) || $mostSimilar[$i]['similar'] == 0){
+						break;
+					}
+					echo '<div class="userImg"><img src="'.
+						 loadImage(getEmail($mostSimilar[$i]['U_ID'])).
+						 '" height=50px style="float: left; padding: 0 10px 10px 0; float: left;"/>'.
+						 '<a href="user.php?U_ID='.$mostSimilar[$i]['U_ID'].'">'.getUsername($mostSimilar[$i]['U_ID']).'</a><br>'.
+						 '相似度:&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
+						 '置信度:&nbsp;'.number_format(
+								getReliability($U_ID, 
+									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
+									
+				}
+                ?>
+				
             </div>
             
             
             <div id="right">
-				<div id="sheet">
+				<div id="sheet" style="display:none;">
 					<h3 style="float: left;">答题卡</h3>
 					<div id="closeSheet" style="float: right; margin: 5px;">
 						<a href="#" style="color: #333; text-shadow: 1px 1px #fff">X</a>
 					</div>
 				</div>
-                <div id="question">
+                <div id="question" style="display:none;">
                     <div id="questionPanel"></div>
                     <div id="commandPanel">
                         <a href="#" class="button small orange">是</a>
@@ -143,14 +147,14 @@
                         <a href="#" class="button small orange">跳过</a>
                     </div>
                 </div>
-               <a href="#">fhdsui</a>回答了问题: 你喜欢动物吗？
-               <div style="text-align: right">
-					<a href="#" class="button small orange">我也回答</a>
-               </div>
-               <div class="time">
-				   2011-4-23 23:22
-               </div>
-               <hr>
+                <?php 
+                $recentAnswers = getRecentAnswers($U_ID, 30);
+                for ($i = 0; $i < count($recentAnswers); ++$i){
+					echo "<a href=\"javascipt:;\">".getUsername($U_ID).
+					"</a>回答了问题: ".$recentAnswers[$i]['content'].
+					"<div style=\"text-align: right\"></div><div class=\"time\">".
+					$recentAnswers[$i]['answer_time']."</div><hr>";
+				}?>
             </div>
         </div>
         <div id="footer">
