@@ -1,8 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     7/7/2011 6:32:58 PM                          */
+/* Created on:     7/7/2011 8:02:30 PM                          */
 /*==============================================================*/
 
+
+drop trigger similarInsertTrigger;
+
+drop trigger similarDeleteTrigger;
+
+drop trigger similarUpdateTrigger;
 
 drop function if exists getIntersetQuesAmt;
 
@@ -27,6 +33,10 @@ drop table if exists OperateUser;
 drop table if exists Question;
 
 drop table if exists Similar;
+
+drop index nameIndex on User;
+
+drop index emailIndex on User;
 
 drop table if exists User;
 
@@ -96,7 +106,7 @@ create table Question
 (
    Q_ID                 int not null auto_increment,
    content              varchar(200) not null,
-   Q_span               char(1),
+   Q_span               char(1) not null,
    primary key (Q_ID)
 );
 
@@ -126,6 +136,7 @@ create table User
    gender               enum('F','M'),
    birthday             date,
    website              varchar(50),
+   U_span               char(1) not null,
    primary key (U_ID)
 );
 

@@ -194,7 +194,7 @@ function setUnfollow($followerID, $followingID){
 }
 
 function insertUser($username, $password, $email, $male='', $birthday='', $website=''){
-	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s')",  
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', 'n')",  
 				 mysql_real_escape_string($username), 
 				 mysql_real_escape_string($password),
 				 mysql_real_escape_string($email),
@@ -210,7 +210,7 @@ function insertUser($username, $password, $email, $male='', $birthday='', $websi
 }
 
 function insertQuestion($content){
-	$query = sprintf("INSERT INTO Question VALUES(default, '%s', null)",
+	$query = sprintf("INSERT INTO Question VALUES(default, '%s', 'n')",
 				mysql_real_escape_string($content));
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
@@ -246,10 +246,25 @@ function getRecentAnswers($U_ID, $limit){
 								mysql_real_escape_string($row['Q_ID']));
 			$contentResult = mysql_query($contentQuery);
 			$content = mysql_fetch_assoc($contentResult);
+			$ans[$len]['Q_ID'] = $row['Q_ID'];
 			$ans[$len]['answer_time'] = $row['answer_time'];
 			$ans[$len]['content'] = $content['content'];
 			$len++;
 		}
+	}
+	return $ans;
+}
+
+function getRndQuestion($U_ID, $amt){
+	$ans = Array();	
+	$len = 0;
+	$query = sprintf("SELECT Q_ID, content FROM Question WHERE Q_ID NOT IN ".
+				"(SELECT Q_ID FROM Answer WHERE U_ID = %d) ORDER BY RAND() LIMIT %d", 
+				$U_ID, $amt);
+	$result = mysql_query($query);
+	while ($row = mysql_fetch_assoc($result)) {
+		$ans[$len] = $row;
+		$len++;
 	}
 	return $ans;
 }

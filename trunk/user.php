@@ -20,28 +20,42 @@
         <link rel="stylesheet" type="text/css" href="css/buttons.css">
         <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
 
-        <script type="text/javascript">
-            var questionList = new Array("你喜欢动物吗？","你喜欢看电影吗？","你喜欢听音乐吗？");
-            var curQuestion = 0;
-            function loadQuestion(index){     
-                $("#questionPanel").text(questionList[index]);
-            };            
-            
-            $(document).ready(function(){
-				$(".command").mouseup(function(){
-					curQuestion++;
-					loadQuestion(curQuestion);
-				});
-				
+		<script type="text/javascript">
+			questionID = 0;
+            $(document).ready(function(){	
 				$("#closeSheet").click(function(){
 					$("#sheet").slideUp(500);
 					$("#question").slideUp(500);
 				});
-			});
-            
+			});            
+			
+			function sendAnswer(answer){
+				alert("questionID = "+questionID);
+				$.ajax({
+					type: "POST",
+					url: "sendAnswer.php",
+					data: ("Q_ID=" + questionID + "&answer=" + answer),
+					success: function(msg){
+						//alert( "Data Saved: " + msg);
+						$("#sheet").slideUp(500);
+						$("#question").slideUp(500);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}            
+			
+			function showQuestion(Q_ID, content){
+				$("#sheet").slideDown(500);
+				$("#question").slideDown(500);
+				questionID = Q_ID;
+				alert(Q_ID);
+				$("#questionPanel").text(content);
+			}
         </script>
     </head>
-    <body onload="loadQuestion(0);">
+    <body>
         <div id="top">
             <?php
             require_once("loadImage.php");
@@ -125,8 +139,7 @@
 						 '相似度:&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
 						 '置信度:&nbsp;'.number_format(
 								getReliability($U_ID, 
-									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
-									
+									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';									
 				}
                 ?>
 				
@@ -143,18 +156,22 @@
                 <div id="question" style="display:none;">
                     <div id="questionPanel"></div>
                     <div id="commandPanel">
-                        <a href="#" class="button small orange">是</a>
-                        <a href="#" class="button small orange">否</a>
-                        <a href="#" class="button small orange">跳过</a>
+                        <a href="javascript:;" class="button small orange" onclick="sendAnswer('y')">是</a>
+                        <a href="javascript:;" class="button small orange" onclick="sendAnswer('n')">否</a>
                     </div>
                 </div>
                 <?php 
                 $recentAnswers = getRecentAnswers($U_ID, 30);
+                print_r($rencentAnswers);
                 for ($i = 0; $i < count($recentAnswers); ++$i){
 					echo "<a href=\"javascipt:;\">".getUsername($U_ID).
 					"</a>回答了问题: ".$recentAnswers[$i]['content'].
-					"<div style=\"text-align: right\"></div><div class=\"time\">".
-					$recentAnswers[$i]['answer_time']."</div><hr>";
+					"<div style=\"text-align: right\"></div>"
+					."<div class=\"time\">".
+					$recentAnswers[$i]['answer_time'].
+					"<a href='javascript:;' class='button small orange' ".
+					"onclick='showQuestion(\"".$rencentAnswers[$i]['Q_ID'].
+					"\", \"".$recentAnswers[$i]['content']."\")';>我也回答</a></div><hr>";
 				}?>
             </div>
         </div>
