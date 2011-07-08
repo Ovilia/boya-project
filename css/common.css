@@ -130,7 +130,7 @@ h3{
     padding: 15px 0 15px 0;
 }
 
-#question{
+.rightBox{
     background-color: #ccc;
     margin: 0px 10px 10px 10px;
     border-bottom-left-radius: 10px;
@@ -139,7 +139,7 @@ h3{
     width: 570px;
 }
 
-#questionPanel{
+.rightBoxPanel{
     width: 100%;
     text-shadow: 1px 1px #fff;
 }
@@ -171,7 +171,7 @@ h3{
 	text-shadow: 1px 1px #ddd;
 }
 
-#sheet{
+.rightBoxHead{
 	background-color: #EFFF5E;/*yellow*/
 	color: #333;
 	text-shadow: 1px 1px #fff;
