@@ -27,6 +27,10 @@
 					$("#sheet").slideUp(500);
 					$("#question").slideUp(500);
 				});
+				$("#closeHead").click(function(){
+					$("#similarBox").slideUp(500);
+					$("#similarHead").slideUp(500);
+				});
 			});
 			
             var questionList = new Array();
@@ -86,6 +90,22 @@
 				}else{
 					requestQuestion();
 				}
+			}
+			
+			function moreSimilar(){
+				$.ajax({
+					type: "GET",
+					url: "moreSimilar.php",
+					data: ("U_ID=" + <?php echo $_SESSION['U_ID'];?>),
+					success: function(msg){
+						$("#similarPanel").html(msg);
+						$("#similarHead").slideDown(500);
+						$("#similarBox").slideDown(500);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
 			}
             
         </script>
@@ -147,16 +167,27 @@
 									
 				}
                 ?>
+                <a style="float: right" href="javascript:;" onclick="moreSimilar()">More>></a>
             </div>
             <div id="right">
-				<div id="sheet">
+				<div id="similarHead" style="display:none;" class="rightBoxHead">
+					<h3 style="float: left;">最相似的人</h3>
+					<div id="closeHead" style="float: right; margin: 5px;">
+						<a href="#" style="color: #333; text-shadow: 1px 1px #fff">X</a>
+					</div>
+				</div>
+                <div id="similarBox" class="rightBox" style="display:none;">
+                    <div id="similarPanel" class="rightBoxPanel"></div>
+                </div>
+                
+				<div id="sheet" class="rightBoxHead">
 					<h3 style="float: left;">答题卡</h3>
 					<div id="closeSheet" style="float: right; margin: 5px;">
 						<a href="#" style="color: #333; text-shadow: 1px 1px #fff">X</a>
 					</div>
 				</div>
-                <div id="question">
-                    <div id="questionPanel"></div>
+                <div id="question" class="rightBox">
+                    <div id="questionPanel" class="rightBoxPanel"></div>
                     <div id="commandPanel">
                         <a href="javascript:;" class="button small orange" onclick="answer('y')">是</a>
                         <a href="javascript:;" class="button small orange" onclick="answer('n')">否</a>

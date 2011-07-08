@@ -159,6 +159,18 @@ function getMostSimilar($U_ID, $offset, $size){
 	return $ans;
 }
 
+function isAnswered($U_ID, $Q_ID){
+	$query = sprintf("SELECT * FROM Answer WHERE U_ID = %s and Q_ID = %s LIMIT 1",
+					 $U_ID, $Q_ID);
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return true;
+	}else{
+		return false;
+	}
+}
+
 function isFollowed($followerID, $followingID){
 	$query = sprintf("SELECT * FROM Follow WHERE follower_ID = %s and following_ID = %s LIMIT 1",
 					 $followerID, $followingID);

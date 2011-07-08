@@ -27,10 +27,13 @@
 					$("#sheet").slideUp(500);
 					$("#question").slideUp(500);
 				});
+				$("#closeHead").click(function(){
+					$("#similarBox").slideUp(500);
+					$("#similarHead").slideUp(500);
+				});
 			});            
 			
 			function sendAnswer(answer){
-				alert("questionID = "+questionID);
 				$.ajax({
 					type: "POST",
 					url: "sendAnswer.php",
@@ -50,8 +53,23 @@
 				$("#sheet").slideDown(500);
 				$("#question").slideDown(500);
 				questionID = Q_ID;
-				alert(Q_ID);
 				$("#questionPanel").text(content);
+			}
+			
+			function moreSimilar(){
+				$.ajax({
+					type: "GET",
+					url: "moreSimilar.php",
+					data: ("U_ID=" + <?php echo $U_ID;?>),
+					success: function(msg){
+						$("#similarPanel").html(msg);
+						$("#similarHead").slideDown(500);
+						$("#similarBox").slideDown(500);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
 			}
         </script>
     </head>
@@ -125,8 +143,8 @@
                 <hr>
                 
                 <h3>和ta最相似的人</h3>
-               <?php
-                $mostSimilar = getMostSimilar($U_ID, 0, 3);
+				<?php               
+                $mostSimilar = getMostSimilar($U_ID, 0, 2);
                 
                 for ($i = 0; $i < 2; ++$i){
 					if (!isset($mostSimilar[$i]) || $mostSimilar[$i]['similar'] == 0){
@@ -139,22 +157,34 @@
 						 '相似度:&nbsp;'.number_format($mostSimilar[$i]['similar'] * 100, 2).'%<br>'.
 						 '置信度:&nbsp;'.number_format(
 								getReliability($U_ID, 
-									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';									
+									$mostSimilar[$i]['U_ID']) * 100, 2).'%</div>';
+									
 				}
                 ?>
 				
+                <a style="float: right" href="javascript:;" onclick="moreSimilar()">More>></a>
             </div>
             
             
             <div id="right">
-				<div id="sheet" style="display:none;">
+				<div id="similarHead" style="display:none;" class="rightBoxHead">
+					<h3 style="float: left;">最相似的人</h3>
+					<div id="closeHead" style="float: right; margin: 5px;">
+						<a href="#" style="color: #333; text-shadow: 1px 1px #fff">X</a>
+					</div>
+				</div>
+                <div id="similarBox" class="rightBox" style="display:none;">
+                    <div id="similarPanel" class="rightBoxPanel"></div>
+                </div>
+                
+				<div id="sheet" style="display:none;" class="rightBoxHead">
 					<h3 style="float: left;">答题卡</h3>
 					<div id="closeSheet" style="float: right; margin: 5px;">
 						<a href="#" style="color: #333; text-shadow: 1px 1px #fff">X</a>
 					</div>
 				</div>
-                <div id="question" style="display:none;">
-                    <div id="questionPanel"></div>
+                <div id="question" class="rightBox" style="display:none;">
+                    <div id="questionPanel" class="rightBoxPanel"></div>
                     <div id="commandPanel">
                         <a href="javascript:;" class="button small orange" onclick="sendAnswer('y')">是</a>
                         <a href="javascript:;" class="button small orange" onclick="sendAnswer('n')">否</a>
@@ -162,16 +192,19 @@
                 </div>
                 <?php 
                 $recentAnswers = getRecentAnswers($U_ID, 30);
-                print_r($rencentAnswers);
                 for ($i = 0; $i < count($recentAnswers); ++$i){
 					echo "<a href=\"javascipt:;\">".getUsername($U_ID).
 					"</a>回答了问题: ".$recentAnswers[$i]['content'].
-					"<div style=\"text-align: right\"></div>"
-					."<div class=\"time\">".
+					"<div style=\"text-align: right\"></div>".
+					"<div class=\"time\">".
 					$recentAnswers[$i]['answer_time'].
-					"<a href='javascript:;' class='button small orange' ".
-					"onclick='showQuestion(\"".$rencentAnswers[$i]['Q_ID'].
-					"\", \"".$recentAnswers[$i]['content']."\")';>我也回答</a></div><hr>";
+					"<a href='javascript:;' class='button small ";
+					if (isAnswered($_SESSION['U_ID'], $recentAnswers[$i]['Q_ID'])){
+						echo "grey' style='color:#333'>我已回答</a></div><hr>";
+					}else{
+						echo "orange' onclick='showQuestion(\"".$recentAnswers[$i]['Q_ID'].
+						"\", \"".$recentAnswers[$i]['content']."\")';>我也回答</a></div><hr>";
+					}
 				}?>
             </div>
         </div>
