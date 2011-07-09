@@ -88,6 +88,39 @@
 					}
 				});
 			}
+			
+			function moreFollower(offset){
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "moreFollower.php",
+					data: ("U_ID=" + <?php echo $U_ID;?> 
+							+ "&offset=" + offset),
+					success: function(msg){
+						$("#mainContent").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}			
+			
+			function moreFollowing(offset){
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "moreFollowing.php",
+					data: ("U_ID=" + <?php echo $U_ID;?> 
+							+ "&offset=" + offset),
+					success: function(msg){
+						$("#mainContent").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
         </script>
     </head>
     <body onload="moreAnswer(0);">
@@ -109,8 +142,11 @@
         <div id="main">
             <div id="left">
                 <div id="leftTop">
-                    <img src="<?php echo $imageUrl; ?>" width="70px" height="70px"
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
+					<a href="http://www.gravatar.com" target=_blank
+					title="Change your avatar via www.gravatar.com">
+						<img src="<?php echo $imageUrl; ?>" width="70px" height="70px"
+							 style="float: left; padding: 0 10px 10px 0; float: left;"/>
+					 </a>
                     <a href="#">
                         <?php
                         echo getUsername($U_ID);
@@ -124,9 +160,9 @@
                     </div>
                 </div>
                 <div style="text-align: center;">
-					关注&nbsp;<a href="#"><?php echo getFollowingAmt($U_ID);?></a>&nbsp;|&nbsp;
-					粉丝&nbsp;<a href="#"><?php echo getFollowerAmt($U_ID);?></a>&nbsp;|&nbsp;
-					回答&nbsp;<a href="#"><?php echo getAnsweredAmt($U_ID);?></a>&nbsp;
+					关注&nbsp;<a href="javascript:;" onclick="moreFollowing(0);"><?php echo getFollowingAmt($U_ID);?></a>&nbsp;|&nbsp;
+					粉丝&nbsp;<a href="javascript:;" onclick="moreFollower(0);"><?php echo getFollowerAmt($U_ID);?></a>&nbsp;|&nbsp;
+					回答&nbsp;<a href="javascript:;" onclick="moreAnswer(0);"><?php echo getAnsweredAmt($U_ID);?></a>&nbsp;
                 </div>
                 
                 <hr>
