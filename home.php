@@ -114,7 +114,39 @@
 					type: "GET",
 					url: "moreAnswer.php",
 					data: ("U_ID=" + <?php echo $_SESSION['U_ID'];?> 
-							+ "&offset=" + offset + "isMe=t"),
+							+ "&offset=" + offset + "&isMe=t"),
+					success: function(msg){
+						$("#mainContent").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function moreFollower(offset){
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "moreFollower.php",
+					data: ("U_ID=" + <?php echo $_SESSION['U_ID'];?> 
+							+ "&offset=" + offset),
+					success: function(msg){
+						$("#mainContent").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function moreFollowing(offset){
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "moreFollowing.php",
+					data: ("U_ID=" + <?php echo $_SESSION['U_ID'];?> 
+							+ "&offset=" + offset),
 					success: function(msg){
 						$("#mainContent").html(msg);
 					},
@@ -144,8 +176,11 @@
         <div id="main">
             <div id="left">
                 <div id="leftTop">
-                    <img src="<?php echo $imageUrl; ?>" width="70px" height="70px"
-                         style="float: left; padding: 0 10px 10px 0; float: left;"/>
+					<a href="http://www.gravatar.com" target=_blank
+					title="Change your avatar via www.gravatar.com">
+						<img src="<?php echo $imageUrl; ?>" width="70px" height="70px"
+							 style="float: left; padding: 0 10px 10px 0; float: left;"/>
+					</a>
                     <a href="#">
                         <?php
                         echo $_SESSION['user_name'];
@@ -159,9 +194,9 @@
                     </div>
                 </div>
                 <div style="text-align: center;">
-					关注&nbsp;<a href="#"><?php echo getFollowingAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
-					粉丝&nbsp;<a href="#"><?php echo getFollowerAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
-					回答&nbsp;<a href="#"><?php echo getAnsweredAmt($_SESSION['U_ID']);?></a>&nbsp;
+					关注&nbsp;<a href="javascript:;" onclick="moreFollowing(0);"><?php echo getFollowingAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
+					粉丝&nbsp;<a href="javascript:;" onclick="moreFollower(0);"><?php echo getFollowerAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
+					回答&nbsp;<a href="javascript:;" onclick="moreAnswer(0);"><?php echo getAnsweredAmt($_SESSION['U_ID']);?></a>&nbsp;
                 </div>
                 <hr>
                 <h3>最相似的人</h3>

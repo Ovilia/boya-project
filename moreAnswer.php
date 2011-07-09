@@ -6,6 +6,8 @@ $U_ID = $_GET['U_ID'];
 $offset = $_GET['offset'];
 $isMe = $_GET['isMe'];
 $pages = ceil(getAnsweredAmt($U_ID) / 20);
+if ($pages == 0)
+	return;
 
 $recentAnswers = getRecentAnswers($U_ID, $offset, 20);
 for ($i = 0; $i < count($recentAnswers); ++$i){
@@ -27,7 +29,7 @@ for ($i = 0; $i < count($recentAnswers); ++$i){
 	echo "</div><hr>";
 }
 
-$curPage = number_format($offset / 20, 0);
+$curPage = floor($offset / 20);
 if ($curPage != 0){
 	echo '<a href="javascript:;" onclick="moreAnswer('.(($curPage - 1) * 20).
 	')">Previous</a> ';
@@ -37,4 +39,5 @@ if ($curPage != $pages - 1){
 	echo '<a href="javascript:;" onclick="moreAnswer('.(($curPage + 1) * 20).
 	')">Next</a>';
 }
+
 ?>

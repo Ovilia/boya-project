@@ -7,18 +7,18 @@
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/buttons.css">		
         
-	<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
-	<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
-	
-	<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
-	<link rel="stylesheet" type="text/css" href="js/dijit/themes/claro/claro.css">
-	
-	<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
-	<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
-	<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
-	
-	<script type="text/javascript" src="js/dojo/dojo.js" djConfig="parseOnLoad:true"></script>
-	<script type="text/javascript">
+		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
+		<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
+		
+		<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
+		<link rel="stylesheet" type="text/css" href="js/dijit/themes/claro/claro.css">
+		
+		<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+		<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
+		
+		<script type="text/javascript" src="js/dojo/dojo.js" djConfig="parseOnLoad:true"></script>
+		<script type="text/javascript">
             dojo.require("dijit.form.CheckBox");
             dojo.require("dijit.form.DateTextBox");
             dojo.require("dijit.form.Form");
@@ -28,11 +28,6 @@
         
         <script type="text/javascript">
                 $('document').ready(function(){
-                    $('#birthday').datepicker({
-                        dateFormat: 'yy-m-d',
-                        maxDate: new Date()
-                    });
-                    
                     $(function() {
 						$("#radio").buttonset();
 					});					
@@ -109,7 +104,7 @@
             </script>
     </head>
 	
-    <body class="claro" style="font-size:15px; font-family: '微软雅黑';">
+    <body class="claro" style="font-size:15px;">
         <div id="top">
             <a href="index.php"><img src="images/title.png" height=45px style="float: left; margin-left: 30px; margin-right: 30px;"/></a>
             <div id="nav">
@@ -162,7 +157,7 @@
 								<span class="required_mark">(*)</span>
 							</td><td>						
 								<input maxlength="16" type="password" dojoType="dijit.form.ValidationTextBox"  
-								id="repassword" name="repassword" required=true invalidMessage="无效的密码"
+								id="repassword" name="repassword" required=true invalidMessage="两次密码不一致"
 								validator="return this.getValue() == dijit.byId('password').getValue()">
 							</td>
 						</tr>
@@ -197,13 +192,13 @@
 								<label for="gender">性别:</label>
 							</td><td>
 							</td><td>
-								<input name="gender" id="male" dojoType="dijit.form.RadioButton" value="1">男</input>
-								<input name="gender" id="female" dojoType="dijit.form.RadioButton"value="0">女</input>
+								<input name="gender" id="male" dojoType="dijit.form.RadioButton" value="M">男</input>
+								<input name="gender" id="female" dojoType="dijit.form.RadioButton"value="F">女</input>
 							</td>
 						</tr>
 					</table>
 					<hr>					
-                    <a href="#" class="button large orange" id="submit" onclick="checkSubmit()">注册</a>
+                    <a href="javascript:;" class="button large orange" id="submit" onclick="checkSubmit()">注册</a>
                     <a href="index.php" class="button large orange">返回</a>
 				</form>
             </div>				

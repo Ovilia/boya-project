@@ -43,6 +43,34 @@ function getWebsite($U_ID){
 	}
 }
 
+function getBirthday($U_ID){	
+	$query = sprintf("SELECT birthday FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
+	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
+	$row = mysql_fetch_assoc($result);
+	if ($row != null && $row['birthday'] != '0000-00-00') {
+		return $row['birthday'];
+	}else{
+		return '';
+	}
+}
+
+function getGender($U_ID){	
+	$query = sprintf("SELECT gender FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
+	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return $row['gender'];
+	}else{
+		return '';
+	}
+}
+
 function getFollowerAmt($U_ID){
 	$query = sprintf("SELECT COUNT(*) as amt FROM Follow WHERE following_ID = %s", $U_ID);
 	$result = mysql_query($query);
@@ -213,6 +241,24 @@ function insertUser($username, $password, $email, $male='', $birthday='', $websi
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
 				 mysql_real_escape_string($website));
+				 echo $query;
+	$result = mysql_query($query);
+	if (mysql_affected_rows() > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function updateUser($U_ID, $username, $email, $male='', $birthday='', $website=''){
+	$query = sprintf("UPDATE User SET user_name = '%s', email = '%s', gender = '%s', birthday = '%s', website = '%s'".
+					" WHERE U_ID = %d",  
+				 mysql_real_escape_string($username), 
+				 mysql_real_escape_string($email),
+				 mysql_real_escape_string($male),
+				 mysql_real_escape_string($birthday),
+				 mysql_real_escape_string($website),
+				 mysql_real_escape_string($U_ID));
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
@@ -288,4 +334,42 @@ function getRndU_ID(){
 	$row = mysql_fetch_assoc($result);
 	return $row['U_ID'];
 }
+
+function getFollowerID($U_ID, $offset, $amt){
+	$query = sprintf("SELECT follower_ID FROM Follow WHERE following_ID = %d ORDER BY follow_time DESC LIMIT %d, %d",
+					$U_ID, $offset, $amt);
+	$result = mysql_query($query);
+	$ans = array();
+	$len = 0;
+	while ($row = mysql_fetch_assoc($result)) {
+		$ans[$len] = $row['follower_ID'];
+		$len++;
+	}
+	return $ans;
+}
+
+function getFollowingID($U_ID, $offset, $amt){
+	$query = sprintf("SELECT following_ID FROM Follow WHERE follower_ID = %d ORDER BY follow_time DESC LIMIT %d, %d",
+					$U_ID, $offset, $amt);
+	$result = mysql_query($query);
+	$ans = array();
+	$len = 0;
+	while ($row = mysql_fetch_assoc($result)) {
+		$ans[$len] = $row['following_ID'];
+		$len++;
+	}
+	return $ans;
+}
+
+function changePassword($U_ID, $oldPW, $newPW){
+	$query = sprintf("UPDATE User SET user_pw = '%s' WHERE U_ID = %d AND user_pw = '%s' LIMIT 1",
+					$newPW, $U_ID, $oldPW);
+	$result = mysql_query($query);	
+	if (mysql_affected_rows() > 0) {
+		return true;
+	} else {
+		return false;
+	}	
+}
+
 ?>

@@ -7,27 +7,16 @@
             <link rel="stylesheet" type="text/css" href="css/common.css">
                 <link rel="stylesheet" type="text/css" href="css/buttons.css">
                     <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
-                    <script type="text/javascript">
-                        $(document).ready(function(){
-                            $("#left").mouseenter(function(){
-                                $("#left").animate({height:"150px"});
-                            });
-                            $("#left").mouseleave(function(){
-                                $("#left").clearQueue();
-                                $("#left").animate({height:"20px"});
-                            });
-                        });
-                    </script>
                     </head>
 
                     <body>
                         <div id="top">
-                            <img src="images/title.png" height=45px style="float: left; margin-left: 30px; margin-right: 30px;"/>
+                            <img src="images/title.png" style="float: left; margin-left: 30px; margin-right: 30px;"/>
                             <div id="nav">
                             </div>
                         </div>
                         <div id="main">
-                            <div id="left" style="text-align:center; height: 20px;">
+                            <div id="left" style="text-align:center;">
                                 <div id="beginBoYa">开始伯牙之旅</div>
                                 <form id="loginForm" style="margin-top: 20px; margin-bottom:20px;" action="login.php" method="POST">
                                     <table style="width:100%;">
@@ -46,14 +35,12 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <table style="text-align:center; width:100%;">
-                                        <tr>
-                                            <td>
-						<a class="button small gray" href="#" onclick="document.forms['loginForm'].submit()">登录</a>
-                                                <a class="button small gray" href="#" onclick="window.location='register.php'">注册</a>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    <div style="text-align:center; width:100%;">
+										<a class="button small gray" href="#" onclick="document.forms['loginForm'].submit()">登录</a>
+										<a class="button small gray" href="#" onclick="window.location='register.php'">注册</a>
+									<hr>
+									<a href="#" style="color:#444;">忘记密码</a> <a href="#" style="color:#444;">后台管理</a>
+									</div>
                                 </form>
                             </div>
                             <div id="right" style="font-size:20px; text-align: center; color: #333;">
