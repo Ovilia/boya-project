@@ -54,6 +54,7 @@
 				$("#question").slideDown(500);
 				questionID = Q_ID;
 				$("#questionPanel").text(content);
+				$('html, body').animate({scrollTop:0}, 'slow');
 			}
 			
 			function moreSimilar(){
@@ -71,9 +72,25 @@
 					}
 				});
 			}
+			
+			function moreAnswer(offset){
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "moreAnswer.php",
+					data: ("U_ID=" + <?php echo $U_ID;?> 
+							+ "&offset=" + offset + "&isMe=f"),
+					success: function(msg){
+						$("#mainContent").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
         </script>
     </head>
-    <body>
+    <body onload="moreAnswer(0);">
         <div id="top">
             <?php
             require_once("loadImage.php");
@@ -82,7 +99,8 @@
             ?>
             <img src="images/title.png" height=45px style="float: left; margin-left: 30px; margin-right: 30px;"/>
             <div id="nav">
-                <a href="home.php">首页</a> | <a href="profile.php">个人设置</a> | <a href="#">随便看看</a>
+                <a href="home.php">首页</a> | <a href="profile.php">个人设置</a> | 
+                <a href="user.php?U_ID=<?php echo getRndU_ID();?>">随便看看</a>
                 <div id="logout" style="float:right; padding-right: 20px;">
                     <a href="logout.php">登出</a>
                 </div>
@@ -190,22 +208,8 @@
                         <a href="javascript:;" class="button small orange" onclick="sendAnswer('n')">否</a>
                     </div>
                 </div>
-                <?php 
-                $recentAnswers = getRecentAnswers($U_ID, 30);
-                for ($i = 0; $i < count($recentAnswers); ++$i){
-					echo "<a href=\"javascipt:;\">".getUsername($U_ID).
-					"</a>回答了问题: ".$recentAnswers[$i]['content'].
-					"<div style=\"text-align: right\"></div>".
-					"<div class=\"time\">".
-					$recentAnswers[$i]['answer_time'].
-					"<a href='javascript:;' class='button small ";
-					if (isAnswered($_SESSION['U_ID'], $recentAnswers[$i]['Q_ID'])){
-						echo "grey' style='color:#333'>我已回答</a></div><hr>";
-					}else{
-						echo "orange' onclick='showQuestion(\"".$recentAnswers[$i]['Q_ID'].
-						"\", \"".$recentAnswers[$i]['content']."\")';>我也回答</a></div><hr>";
-					}
-				}?>
+                <div id="mainContent">
+				</div>
             </div>
         </div>
         <div id="footer">
