@@ -245,12 +245,13 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 	}	
 }
 
-function getRecentAnswers($U_ID, $limit){
+function getRecentAnswers($U_ID, $offset, $amt){
 	$len = 0;
 	$ans = Array();
-	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d ORDER BY answer_time DESC LIMIT %d",
+	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d ORDER BY answer_time DESC LIMIT %d, %d",
 				mysql_real_escape_string($U_ID),
-				mysql_real_escape_string($limit));
+				mysql_real_escape_string($offset),
+				mysql_real_escape_string($amt));
 	$result = mysql_query($query);
 	while ($row = mysql_fetch_assoc($result)) {
 		if ($row['Q_ID'] != '' && $row['Q_ID'] != null){
@@ -281,4 +282,10 @@ function getRndQuestion($U_ID, $amt){
 	return $ans;
 }
 
+function getRndU_ID(){
+	$query = "SELECT U_ID FROM User WHERE U_span != 'y' ORDER BY RAND() LIMIT 1";
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	return $row['U_ID'];
+}
 ?>
