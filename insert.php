@@ -22,5 +22,5 @@ function startInsert($offset, $amt){
 	}
 }
 
-startInsert(100, 1000);
+startInsert(0, 100);
 ?>

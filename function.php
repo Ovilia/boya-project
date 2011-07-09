@@ -241,7 +241,6 @@ function insertUser($username, $password, $email, $male='', $birthday='', $websi
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
 				 mysql_real_escape_string($website));
-				 echo $query;
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
