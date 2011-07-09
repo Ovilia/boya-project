@@ -1,0 +1,9 @@
+This is Ovilia Zhang's project of Database course in SE, SJTU.
+
+BoYa is a project to find people with similar values.
+To build up this site, please start with following instructions:
+0. Make sure you have LAMP installed
+1. Create database named BoYa with MySQL
+2. Change role name and password in connect.php file and function.php file
+3. Run insert.php(you may change parameters to adjust data amount)
+4. Run index.php
