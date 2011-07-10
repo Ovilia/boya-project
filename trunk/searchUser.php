@@ -1,14 +1,16 @@
 <?php
 require_once('function.php');
+require_once('adminFunction.php');
 require_once('loadImage.php');
 
+$input = $_GET['input'];
 $offset = $_GET['offset'];
 
-$user = getUserID($offset, 30);
-$pages = ceil(getUserAmt($U_ID) / 30);
+$user = searchUsername($input, $offset);
+$pages = ceil(getSearchUserAmt($input) / 30);
 if ($pages == 0)
 	return;
-
+	
 echo "<h2>User</h2><form id='searchForm'><input id='searchInput' name='searchInput'>".
 	"<a class='button gray small' href='javascript:;' onclick='searchUser(0)'>Search</a></form><hr>";
 for ($i = 0; $i < count($user); ++$i){
@@ -29,13 +31,12 @@ for ($i = 0; $i < count($user); ++$i){
 
 $curPage = floor($offset / 30);
 if ($curPage != 0){
-	echo '<a href="javascript:;" onclick="moreUser('.(($curPage - 1) * 30).
+	echo '<a href="javascript:;" onclick="searchUser('.(($curPage - 1) * 30).
 	')">Previous</a> ';
 }
 echo ($curPage + 1)."/".$pages." ";
 if ($curPage != $pages - 1){
-	echo '<a href="javascript:;" onclick="moreUser('.(($curPage + 1) * 30).
+	echo '<a href="javascript:;" onclick="searchUser('.(($curPage + 1) * 30).
 	')">Next</a>';
 }
-
 ?>
