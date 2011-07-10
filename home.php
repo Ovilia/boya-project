@@ -156,6 +156,26 @@
 				});
 			}
             
+            function addQues(){
+				var content = prompt("请输入问题","");
+				if (content!=null && content!=""){
+					$.ajax({
+						type: "GET",
+						url: "addQues.php",
+						data: ("content=" + content),
+						success: function(msg){
+							if (msg == 't')
+								alert("新建问题成功！");
+							else
+								alert(msg + "新建问题失败！");
+						},
+						error: function(msg){
+							alert("Database Error");
+						}
+					});
+				}
+			}
+			
         </script>
     </head>
     <body onload="loadQuestion(0);moreAnswer(0);">
@@ -196,7 +216,13 @@
                 <div style="text-align: center;">
 					关注&nbsp;<a href="javascript:;" onclick="moreFollowing(0);"><?php echo getFollowingAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
 					粉丝&nbsp;<a href="javascript:;" onclick="moreFollower(0);"><?php echo getFollowerAmt($_SESSION['U_ID']);?></a>&nbsp;|&nbsp;
-					回答&nbsp;<a href="javascript:;" onclick="moreAnswer(0);"><?php echo getAnsweredAmt($_SESSION['U_ID']);?></a>&nbsp;
+					回答&nbsp;<a href="javascript:;" onclick="moreAnswer(0);"><?php echo getAnsweredAmt($_SESSION['U_ID']);?></a>&nbsp;<br>
+					
+					<?php
+					if ($_SESSION['VIP'] == 1){
+						echo '<a href="javascript:;" onclick="addQues();" class="button gray small">新增问题</a>';
+					}
+					?>
                 </div>
                 <hr>
                 <h3>最相似的人</h3>

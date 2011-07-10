@@ -47,6 +47,20 @@ function getUserSpam($U_ID){
 	}
 }
 
+function getQuesSpam($Q_ID){
+	$query = sprintf("SELECT Q_span FROM Question WHERE Q_ID = %s LIMIT 1", $Q_ID);
+	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
+	$row = mysql_fetch_assoc($result);
+	if ($row['Q_span'] != 'y' && $row['Q_span'] != 'Y') {
+		return false;
+	}else{
+		return true;
+	}
+}
+
 function getWebsite($U_ID){
 	$query = sprintf("SELECT website FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
 	$result = mysql_query($query);
@@ -118,7 +132,7 @@ function getFollowingAmt($U_ID){
 }
 
 function getAnsweredAmt($U_ID){
-	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE U_ID = %s", $U_ID);
+	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE U_ID = %s AND Q_ID IN (SELECT Q_ID FROM Question WHERE Q_span != 'Y' AND Q_span != 'y')", $U_ID);
 	$result = mysql_query($query);
 	if (!$result){
 		return $query;
@@ -291,7 +305,7 @@ function insertQuestion($content){
 	if (mysql_affected_rows() > 0) {
 		return true;
 	} else {
-		return false;
+		return $query;
 	}		
 }
 
@@ -311,10 +325,12 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 function getRecentAnswers($U_ID, $offset, $amt){
 	$len = 0;
 	$ans = Array();
-	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d ORDER BY answer_time DESC LIMIT %d, %d",
+	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d AND Q_ID IN (SELECT Q_ID FROM Question WHERE Q_span != 'y' AND Q_span != 'Y') ".
+		"ORDER BY answer_time DESC LIMIT %d, %d",
 				mysql_real_escape_string($U_ID),
 				mysql_real_escape_string($offset),
 				mysql_real_escape_string($amt));
+				
 	$result = mysql_query($query);
 	while ($row = mysql_fetch_assoc($result)) {
 		if ($row['Q_ID'] != '' && $row['Q_ID'] != null){
@@ -334,7 +350,7 @@ function getRecentAnswers($U_ID, $offset, $amt){
 function getRndQuestion($U_ID, $amt){
 	$ans = Array();	
 	$len = 0;
-	$query = sprintf("SELECT Q_ID, content FROM Question WHERE Q_ID NOT IN ".
+	$query = sprintf("SELECT Q_ID, content FROM Question WHERE Q_span != 'y' AND Q_span != 'Y' AND Q_ID NOT IN ".
 				"(SELECT Q_ID FROM Answer WHERE U_ID = %d) ORDER BY RAND() LIMIT %d", 
 				$U_ID, $amt);
 	$result = mysql_query($query);
@@ -378,8 +394,42 @@ function getUserID($offset, $amt){
 	return $ans;
 }
 
+function getQ_ID($offset, $amt){
+	$query = sprintf("SELECT Q_ID FROM Question LIMIT %d, %d",
+					$offset, $amt);
+	$result = mysql_query($query);
+	$ans = array();
+	$len = 0;
+	while ($row = mysql_fetch_assoc($result)) {
+		$ans[$len] = $row['Q_ID'];
+		$len++;
+	}
+	return $ans;
+}
+
+function getQuesContent($Q_ID){
+	$query = sprintf("SELECT content FROM Question WHERE Q_ID = %s LIMIT 1", $Q_ID);
+	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return $row['content'];
+	}else{
+		return '';
+	}
+}
+
 function getUserAmt(){
 	$query = "SELECT COUNT(*) AS amt FROM User";
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	return $row['amt'];
+}
+
+function getQuesAmt(){
+	$query = "SELECT COUNT(*) AS amt FROM Question";
 	$result = mysql_query($query);
 	$row = mysql_fetch_assoc($result);
 	return $row['amt'];

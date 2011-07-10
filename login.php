@@ -13,7 +13,7 @@ if(!isset($email) || !isset($password) || $email == '' || $password == ''){
 }
 
 require_once('connect.php');
-$query = sprintf("SELECT U_ID, user_name FROM User WHERE email = '%s' AND user_pw = '%s' AND U_span != 'y' LIMIT 1",
+$query = sprintf("SELECT U_ID, user_name, VIP FROM User WHERE email = '%s' AND user_pw = '%s' AND U_span != 'y' LIMIT 1",
 				 mysql_real_escape_string($email), mysql_real_escape_string($password));
 	
 //echo $query;			 
@@ -24,6 +24,7 @@ if ($row != null) {
     session_start();
     $_SESSION['U_ID'] = $row['U_ID'];
     $_SESSION['user_name'] = $row['user_name'];
+    $_SESSION['VIP'] = $row['VIP'];
     $_SESSION['email'] = $email;
 	header("location:home.php");
 }
