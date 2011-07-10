@@ -1,5 +1,9 @@
 <?php
-require_once('connect.php');
+
+if($_SESSION['isAdmin'] == 'y')
+	require_once('adminConnect.php');
+else
+	require_once('connect.php');
 
 function getUsername($U_ID){	
 	$query = sprintf("SELECT user_name FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
@@ -26,6 +30,20 @@ function getEmail($U_ID){
 		return $row['email'];
 	}else{
 		return '';
+	}
+}
+
+function getUserSpam($U_ID){
+	$query = sprintf("SELECT U_span FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
+	$result = mysql_query($query);
+	if (!$result){
+		return mysql_error();
+	}
+	$row = mysql_fetch_assoc($result);
+	if ($row['U_span'] != 'y' && $row['U_span'] != 'Y') {
+		return false;
+	}else{
+		return true;
 	}
 }
 
@@ -234,7 +252,7 @@ function setUnfollow($followerID, $followingID){
 }
 
 function insertUser($username, $password, $email, $male='', $birthday='', $website=''){
-	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', 'n')",  
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', 'n', 'n')",  
 				 mysql_real_escape_string($username), 
 				 mysql_real_escape_string($password),
 				 mysql_real_escape_string($email),
@@ -347,6 +365,26 @@ function getFollowerID($U_ID, $offset, $amt){
 	return $ans;
 }
 
+function getUserID($offset, $amt){
+	$query = sprintf("SELECT U_ID FROM User LIMIT %d, %d",
+					$offset, $amt);
+	$result = mysql_query($query);
+	$ans = array();
+	$len = 0;
+	while ($row = mysql_fetch_assoc($result)) {
+		$ans[$len] = $row['U_ID'];
+		$len++;
+	}
+	return $ans;
+}
+
+function getUserAmt(){
+	$query = "SELECT COUNT(*) AS amt FROM User";
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	return $row['amt'];
+}
+
 function getFollowingID($U_ID, $offset, $amt){
 	$query = sprintf("SELECT following_ID FROM Follow WHERE follower_ID = %d ORDER BY follow_time DESC LIMIT %d, %d",
 					$U_ID, $offset, $amt);
@@ -366,6 +404,29 @@ function changePassword($U_ID, $oldPW, $newPW){
 	$result = mysql_query($query);	
 	if (mysql_affected_rows() > 0) {
 		return true;
+	} else {
+		return false;
+	}	
+}
+
+function emailExist($email){
+	$query = sprintf("SELECT * FROM User WHERE email = '%s' LIMIT 1", $email);
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	if ($row['email']){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function resetPassword($email){
+	$password = substr(md5(rand(0, 100).$email), 0, 16);
+	$query = sprintf("UPDATE User SET user_pw = '%s' WHERE email = '%s' LIMIT 1",
+					$password, $email);
+	$result = mysql_query($query);	
+	if (mysql_affected_rows() > 0) {
+		return $password;
 	} else {
 		return false;
 	}	

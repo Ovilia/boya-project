@@ -16,7 +16,7 @@ require_once('connect.php');
 $query = sprintf("SELECT U_ID, user_name FROM User WHERE email = '%s' AND user_pw = '%s' AND U_span != 'y' LIMIT 1",
 				 mysql_real_escape_string($email), mysql_real_escape_string($password));
 	
-echo $query;			 
+//echo $query;			 
 $result = mysql_query($query);
 
 $row = mysql_fetch_assoc($result);
@@ -28,6 +28,6 @@ if ($row != null) {
 	header("location:home.php");
 }
 else {
-    echo 'No user matched!<br>Click <a href="index.php">here</a> to return.';
+    echo '<script type="text/javascript">alert("No user matched!"); window.location.href="index.php"</script>';
 }
 ?>

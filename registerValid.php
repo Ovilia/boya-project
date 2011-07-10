@@ -13,6 +13,6 @@ require_once('function.php');
 if (insertUser($username, $password, $email, $gender, $birthday, $website)){
 	echo "<script language=\"JavaScript\">alert(\"注册成功!\");window.location.href=\"index.php\"; </script>";
 } else {
-	//echo "<script language=\"JavaScript\">alert(\"注册失败!\");window.location.href=\"register.php\"; </script>";
+	echo "<script language=\"JavaScript\">alert(\"注册失败!\");window.location.href=\"register.php\"; </script>";
 }
 ?>
