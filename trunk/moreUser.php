@@ -5,7 +5,7 @@ require_once('loadImage.php');
 $offset = $_GET['offset'];
 
 $user = getUserID($offset, 30);
-$pages = ceil(getUserAmt($U_ID) / 30);
+$pages = ceil(getUserAmt() / 30);
 if ($pages == 0)
 	return;
 

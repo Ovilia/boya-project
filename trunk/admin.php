@@ -95,6 +95,85 @@
 					}
 				});
 			}
+			
+			function moreQues(offset){
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "moreQues.php",
+					data: ("offset=" + offset),
+					success: function(msg){
+						$("#right").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}		
+			
+			function deleteQues(offset, Q_ID){
+				$.ajax({
+					type: "GET",
+					url: "deleteQues.php",
+					data: ("Q_ID=" + Q_ID),
+					success: function(msg){
+						if (msg == 'f')
+							alert("Failed to delete Question: " + Q_ID);
+						moreQues(offset);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}	
+			
+			function spamQues(offset, Q_ID){
+				$.ajax({
+					type: "GET",
+					url: "spamQues.php",
+					data: ("Q_ID=" + Q_ID),
+					success: function(msg){
+						if (msg == 'f')
+							alert("Failed to spam Question: " + U_ID);
+						moreQues(offset);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function unspamQues(offset, Q_ID){
+				$.ajax({
+					type: "GET",
+					url: "unspamQues.php",
+					data: ("Q_ID=" + Q_ID),
+					success: function(msg){
+						if (msg == 'f')
+							alert("Failed to unspam Question: " + U_ID);
+						moreQues(offset);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function searchQues(offset){
+				var input = document.getElementById("searchInput").value;
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "searchQues.php",
+					data: ("input=" + input + "&offset=" + offset),
+					success: function(msg){
+						$("#right").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
         </script>
 
     </head>
@@ -109,8 +188,10 @@
         </div>
         <div id="main">
             <div id="left">
-				<a href="javascript:;" onclick="moreUser(0)">User</a><br>
-				<a href="/phpMyAdmin">phpMyAdmin</a>
+				<h3 style="text-align:center">Admin</h3><hr>
+				<a href="javascript:;" onclick="moreUser(0)" class="button gray small">User</a><br>
+				<a href="javascript:;" onclick="moreQues(0)" class="button gray small">Question</a><br>
+				<a href="/phpMyAdmin" class="button gray small">phpMyAdmin</a>
             </div>
             <div id="right">
 			</div>

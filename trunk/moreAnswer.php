@@ -11,6 +11,9 @@ if ($pages == 0)
 
 $recentAnswers = getRecentAnswers($U_ID, $offset, 20);
 for ($i = 0; $i < count($recentAnswers); ++$i){
+	if ($recentAnswers[$i]['content'] == '')
+		return;
+		
 	echo "<a href=\"javascipt:;\">".getUsername($U_ID).
 	"</a>回答了问题: ".$recentAnswers[$i]['content'].
 	"<div style=\"text-align: right\"></div><div class=\"time\">".
@@ -19,10 +22,12 @@ for ($i = 0; $i < count($recentAnswers); ++$i){
 	if ($isMe == 'f'){
 		echo "<a href='javascript:;' class='button small ";
 		if (isAnswered($_SESSION['U_ID'], $recentAnswers[$i]['Q_ID'])){
-			echo "grey' style='color:#333'>我已回答</a>";
+			echo "gray' style='color:#333'>我已回答</a>";
 		}else{
 			echo "orange' onclick='showQuestion(\"".$recentAnswers[$i]['Q_ID'].
-			"\", \"".$recentAnswers[$i]['content']."\")';>我也回答</a>";
+			"\", \"".$recentAnswers[$i]['content']."\");".
+			" \$(this).removeClass(); \$(this).addClass(\"button gray small\"); ".
+			"\$(this).text(\"我已回答\");'>我也回答</a>";
 		}
 	}
 	

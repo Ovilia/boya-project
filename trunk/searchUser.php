@@ -11,7 +11,8 @@ $pages = ceil(getSearchUserAmt($input) / 30);
 if ($pages == 0)
 	return;
 	
-echo "<h2>User</h2><form id='searchForm'><input id='searchInput' name='searchInput'>".
+echo "<h2>User</h2><form id='searchForm'><input id='searchInput' name='searchInput' value='".
+	$_GET['input']."'>".
 	"<a class='button gray small' href='javascript:;' onclick='searchUser(0)'>Search</a></form><hr>";
 for ($i = 0; $i < count($user); ++$i){
 	$imageUrl = loadImage(getEmail($user[$i]));
