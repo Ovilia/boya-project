@@ -47,6 +47,54 @@
 					}
 				});
 			}
+			
+			function spamUser(offset, U_ID){
+				$.ajax({
+					type: "GET",
+					url: "spamUser.php",
+					data: ("U_ID=" + U_ID),
+					success: function(msg){
+						if (msg == 'f')
+							alert("Failed to spam User: " + U_ID);
+						moreUser(offset);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function unspamUser(offset, U_ID){
+				$.ajax({
+					type: "GET",
+					url: "unspamUser.php",
+					data: ("U_ID=" + U_ID),
+					success: function(msg){
+						if (msg == 'f')
+							alert("Failed to unspam User: " + U_ID);
+						moreUser(offset);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
+			
+			function searchUser(offset){
+				var input = document.getElementById("searchInput").value;
+				$('html, body').animate({scrollTop:0}, 'slow');
+				$.ajax({
+					type: "GET",
+					url: "searchUser.php",
+					data: ("input=" + input + "&offset=" + offset),
+					success: function(msg){
+						$("#right").html(msg);
+					},
+					error: function(msg){
+						alert("Database Error");
+					}
+				});
+			}
         </script>
 
     </head>
