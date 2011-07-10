@@ -267,7 +267,7 @@
 								</td><td>
 								</td><td>						
 									<input maxlength="16" type="password" dojoType="dijit.form.ValidationTextBox"  
-									id="repassword" name="repassword" required=true invalidMessage="无效的密码"
+									id="repassword" name="repassword" required=true invalidMessage="两次密码不一致"
 									validator="return this.getValue() == dijit.byId('newpassword').getValue()">
 								</td>
 							</tr>
