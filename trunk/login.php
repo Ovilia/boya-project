@@ -13,7 +13,7 @@ if(!isset($email) || !isset($password) || $email == '' || $password == ''){
 }
 
 require_once('connect.php');
-$query = sprintf("SELECT U_ID, user_name, VIP FROM User WHERE email = '%s' AND user_pw = '%s' AND U_span != 'y' LIMIT 1",
+$query = sprintf("SELECT U_ID, user_name, VIP FROM User WHERE email = '%s' AND user_pw = '%s' AND U_spam != 'y' LIMIT 1",
 				 mysql_real_escape_string($email), mysql_real_escape_string($password));
 	
 //echo $query;			 

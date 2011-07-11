@@ -12,7 +12,7 @@ function deleteUser($U_ID){
 }
 
 function spamUser($U_ID){	
-	$query = sprintf("UPDATE User SET U_span = 'y' WHERE U_ID = %d LIMIT 1", $U_ID);
+	$query = sprintf("UPDATE User SET U_spam = 'y' WHERE U_ID = %d LIMIT 1", $U_ID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
@@ -22,7 +22,7 @@ function spamUser($U_ID){
 }
 
 function unspamUser($U_ID){	
-	$query = sprintf("UPDATE User SET U_span = 'n' WHERE U_ID = %d LIMIT 1", $U_ID);
+	$query = sprintf("UPDATE User SET U_spam = 'n' WHERE U_ID = %d LIMIT 1", $U_ID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
@@ -42,7 +42,7 @@ function deleteQues($Q_ID){
 }
 
 function spamQues($Q_ID){	
-	$query = sprintf("UPDATE Question SET Q_span = 'y' WHERE Q_ID = %d LIMIT 1", $Q_ID);
+	$query = sprintf("UPDATE Question SET Q_spam = 'y' WHERE Q_ID = %d LIMIT 1", $Q_ID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
@@ -52,7 +52,7 @@ function spamQues($Q_ID){
 }
 
 function unspamQues($Q_ID){	
-	$query = sprintf("UPDATE Question SET Q_span = 'n' WHERE Q_ID = %d LIMIT 1", $Q_ID);
+	$query = sprintf("UPDATE Question SET Q_spam = 'n' WHERE Q_ID = %d LIMIT 1", $Q_ID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
