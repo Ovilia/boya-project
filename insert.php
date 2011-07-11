@@ -1,50 +1,50 @@
 <?php
-require_once('function.php');
+require_once("function.php");
 
 function startInsert($offset, $amt){
-	$amt2 = $amt * $amt;
-	
-	echo 'insertUser, insertQuestion';
+	/*
+	echo "insertUser, insertQuestion";
 	for ($i = 0; $i < $amt; ++$i){
 		if ($i % 1000 == 0)
-			echo $i.' ';
+			echo $i." ";
 		
 		$index = $offset + $i;
 		if ($i % 5 == 0)
-			$VIP = 'y';
+			$VIP = 1;
 		else
-			$VIP = 'n';
+			$VIP = 0;
 		
-		insertUser('username'.$index, 'password'.$index, 'email'.$index.'@boya.com', $VIP);					
-		insertQuestion('你是否喜欢'.$index);
-	}
+		insertUser("username".$index, "password".$index, "email".$index."@boya.com", "", "", "", $VIP);					
+		insertQuestion("你是否喜欢".$index);
+	}*/
 	
-	echo 'insertAnswer';
-	for ($i = 0; $i < $amt; ++$i){	
-		echo $i.' ';
-		$rnd = rand(0, 1);
-		if ($rnd % 2)
-			$ans = 'Y';
-		else
-			$ans = 'N';
-		for ($j = 0; $j < $amt; ++$j){	
-			if ($j % $i < 4)
-				insertAnswer($i, $j, $ans);	
+	//echo "insertAnswer";
+	$str = "insert into Answer values ";
+	for ($i = 1; $i < 100; ++$i){
+		for ($j = 1000; $j < 1100; ++$j){	
+			if ($i != 1 || $j != 1000)
+				$str .= ", ";
+			if (rand(0,2))
+				$ans = "'y'";
+			else
+				$ans = "'n'";
+			$str .= "(" . $i . ", " . $j . ", default, " . $ans . ")";
 		}
 	}
-	
-	echo 'insertFollow';
-	for ($i = 0; $i < $amt; ++$i){
-		echo $i.' ';
-		$rnd = rand(0, 2);
-		for ($j = 0; $j < $amt; ++$j){	
-			if ($j % $i == 0)
-				setFollow($i, $j);	
+	$str .= ";";
+	echo $str;
+	/*
+	echo "insertFollow";
+	for ($i = 0; $i < $ansAmt; ++$i){	
+		echo $i." ";
+		for ($j = 0; $j < 200; ++$j){	
+			$rnd = rand(0, $amt);
+			setFollow($i, $rnd);
 		}
-	}
+	}*/
 
 }
 
-startInsert(0, 100);
+startInsert(0, 100000);
 
 ?>

@@ -267,15 +267,15 @@ function setUnfollow($followerID, $followingID){
 	}
 }
 
-function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP='n'){
-	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', '%s', '%s')",  
+function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP=0){
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%s', '%s', '%s', %d, 'n')",  
 				 mysql_real_escape_string($username), 
 				 substr(md5('boya'.mysql_real_escape_string($password)), 0, 16),
 				 mysql_real_escape_string($email),
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
 				 mysql_real_escape_string($website),
-				 mysql_real_escape_string($VIP));
+				 $VIP);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
@@ -321,7 +321,7 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 	if (mysql_affected_rows() > 0) {
 		return true;
 	} else {
-		return false;
+		return $query;
 	}	
 }
 
