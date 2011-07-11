@@ -1,6 +1,6 @@
 <?php
 
-if($_SESSION['isAdmin'] == 'y')
+if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 'y')
 	require_once('adminConnect.php');
 else
 	require_once('connect.php');
@@ -268,9 +268,9 @@ function setUnfollow($followerID, $followingID){
 }
 
 function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP='n'){
-	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', '%s', 'n')",  
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', '%s', '%s')",  
 				 mysql_real_escape_string($username), 
-				 mysql_real_escape_string($password),
+				 substr(md5('boya'.mysql_real_escape_string($password)), 0, 16),
 				 mysql_real_escape_string($email),
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
@@ -453,7 +453,7 @@ function getFollowingID($U_ID, $offset, $amt){
 
 function changePassword($U_ID, $oldPW, $newPW){
 	$query = sprintf("UPDATE User SET user_pw = '%s' WHERE U_ID = %d AND user_pw = '%s' LIMIT 1",
-					$newPW, $U_ID, $oldPW);
+					substr(md5('boya'.$newPW), 0, 16), $U_ID, substr(md5('boya'.$oldPW), 0, 16));
 	$result = mysql_query($query);	
 	if (mysql_affected_rows() > 0) {
 		return true;
