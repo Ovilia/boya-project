@@ -17,7 +17,10 @@
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/buttons.css">
         <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
-
+		<script type="text/javascript" src="js/highcharts.js"></script>
+		<script type="text/javascript" src="js/modules/exporting.js"></script>
+		<script type="text/javascript" src="js/themes/gray.js"></script>
+		
         <script type="text/javascript">
             $(document).ready(function(){
 				curQuestion = 0;
@@ -176,6 +179,134 @@
 				}
 			}
 			
+			
+			var chart;
+			$(document).ready(function() {
+				chart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'chart', 
+						defaultSeriesType: 'scatter',
+						zoomType: 'xy'
+					},
+					title: {
+						text: '最相似的人'
+					},
+					xAxis: {
+						title: {
+							enabled: true,
+							text: '相似度(%)'
+						},
+						startOnTick: true,
+						endOnTick: true,
+						showLastLabel: true,
+						max: 100
+					},
+					yAxis: {
+						title: {
+							text: '置信度(%)'
+						},
+						max: 100
+					},
+					tooltip: {
+						formatter: function() {
+				                return '相似度: '+
+								this.x +'%, 置信度: '+ this.y +'%';
+						}
+					},
+					legend: {
+						layout: 'vertical',
+						align: 'left',
+						verticalAlign: 'top',
+						x: 40,
+						y: 40,
+						floating: true,
+						backgroundColor: '#333',
+						borderWidth: 1
+					},
+					plotOptions: {
+						scatter: {
+							marker: {
+								radius: 7,
+								states: {
+									hover: {
+										enabled: true,
+										lineColor: 'rgb(100,100,100)'
+									}
+								}
+							},
+							states: {
+								hover: {
+									marker: {
+										enabled: true
+									}
+								}
+							}
+						},						
+						series: {
+							cursor: 'pointer',
+							point: {
+								events: {
+									click: function() {
+										location.href = this.options.url;
+									}
+								}
+							}
+						}
+					},
+					<?php
+						$similar = getMostSimilar($_SESSION['U_ID'], 0, 50);
+						$similarF = array();
+						$similarN = array();
+						for ($i = 0; $i < count($similar); ++$i){
+							if (!isset($similar[$i]) || $similar[$i]['similar'] == 0){
+								break;
+							}
+							if (isFollowed($_SESSION['U_ID'], $similar[$i]['U_ID'])){
+								array_push($similarF, $similar[$i]);
+							}else{
+								array_push($similarN, $similar[$i]);
+							}
+						}
+					?>
+					series: [{
+						name: 'Following',
+						color: 'rgba(255, 170, 0, .8)',
+						data: [
+						<?php
+							for ($i = 0; $i < count($similarF); ++$i){
+								if (!isset($similarF[$i]) || $similarF[$i]['similar'] == 0){
+									break;
+								}
+								if ($i != 0){
+									echo ', ';
+								}
+								echo '{x:'.number_format($similarF[$i]['similar'] * 100, 2).
+										', y:'.number_format(getReliability($_SESSION['U_ID'], $similarF[$i]['U_ID']) * 100, 2).
+										', url: "user.php?U_ID='.$similarF[$i]['U_ID'].'"}';
+							}
+						?>
+						]
+					}, {
+						name: 'Not following',
+						color: 'rgba(201, 256, 92, .5)',
+						data: [
+						<?php
+							for ($i = 0; $i < count($similarN); ++$i){
+								if (!isset($similarN[$i]) || $similarN[$i]['similar'] == 0){
+									break;
+								}
+								if ($i != 0){
+									echo ', ';
+								}
+								echo '{x:'.number_format($similarN[$i]['similar'] * 100, 2).
+										', y:'.number_format(getReliability($_SESSION['U_ID'], $similarN[$i]['U_ID']) * 100, 2).
+										', url: "user.php?U_ID='.$similarN[$i]['U_ID'].'"}';
+								}
+							?>
+						]
+					}]
+				});
+			});
         </script>
     </head>
     <body onload="loadQuestion(0);moreAnswer(0);">
@@ -248,6 +379,9 @@
                 <a style="float: right" href="javascript:;" onclick="moreSimilar()">More>></a>
             </div>
             <div id="right">
+				<a href="javascript:;" onclick="$('#chart').slideToggle(500);">Chart</a>
+                <div id="chart" style="text-shadow: 0 0 1px #666"></div>
+                
 				<div id="similarHead" style="display:none;" class="rightBoxHead">
 					<h3 style="float: left;">最相似的人</h3>
 					<div id="closeHead" style="float: right; margin: 5px;">
@@ -272,6 +406,7 @@
                         <a href="javascript:;" class="button small orange" onclick="answer('p')">跳过</a>
                     </div>
                 </div>
+                
                 <div id="mainContent">
 				</div>
             </div>

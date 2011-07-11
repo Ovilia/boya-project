@@ -34,13 +34,13 @@ function getEmail($U_ID){
 }
 
 function getUserSpam($U_ID){
-	$query = sprintf("SELECT U_span FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
+	$query = sprintf("SELECT U_spam FROM User WHERE U_ID = %s LIMIT 1", $U_ID);
 	$result = mysql_query($query);
 	if (!$result){
 		return mysql_error();
 	}
 	$row = mysql_fetch_assoc($result);
-	if ($row['U_span'] != 'y' && $row['U_span'] != 'Y') {
+	if ($row['U_spam'] != 'y' && $row['U_spam'] != 'Y') {
 		return false;
 	}else{
 		return true;
@@ -48,13 +48,13 @@ function getUserSpam($U_ID){
 }
 
 function getQuesSpam($Q_ID){
-	$query = sprintf("SELECT Q_span FROM Question WHERE Q_ID = %s LIMIT 1", $Q_ID);
+	$query = sprintf("SELECT Q_spam FROM Question WHERE Q_ID = %s LIMIT 1", $Q_ID);
 	$result = mysql_query($query);
 	if (!$result){
 		return mysql_error();
 	}
 	$row = mysql_fetch_assoc($result);
-	if ($row['Q_span'] != 'y' && $row['Q_span'] != 'Y') {
+	if ($row['Q_spam'] != 'y' && $row['Q_spam'] != 'Y') {
 		return false;
 	}else{
 		return true;
@@ -132,7 +132,7 @@ function getFollowingAmt($U_ID){
 }
 
 function getAnsweredAmt($U_ID){
-	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE U_ID = %s AND Q_ID IN (SELECT Q_ID FROM Question WHERE Q_span != 'Y' AND Q_span != 'y')", $U_ID);
+	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE U_ID = %s AND Q_ID IN (SELECT Q_ID FROM Question WHERE Q_spam != 'Y' AND Q_spam != 'y')", $U_ID);
 	$result = mysql_query($query);
 	if (!$result){
 		return $query;
@@ -186,6 +186,8 @@ function getUnionQuesAmt($U_ID1, $U_ID2){
 }
 
 function getReliability($U_ID1, $U_ID2){
+	if (getUnionQuesAmt($U_ID1, $U_ID2) == 0)
+		return 0;
 	return getIntersetQuesAmt($U_ID1, $U_ID2) / getUnionQuesAmt($U_ID1, $U_ID2);
 }
 
@@ -244,7 +246,7 @@ function isFollowed($followerID, $followingID){
 }
 
 function setFollow($followerID, $followingID){
-	$query = sprintf("INSERT INTO Follow VALUES (%s, %s, default, false)",
+	$query = sprintf("INSERT INTO Follow VALUES (%s, %s, default)",
 					 $followerID, $followingID);
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
@@ -265,14 +267,15 @@ function setUnfollow($followerID, $followingID){
 	}
 }
 
-function insertUser($username, $password, $email, $male='', $birthday='', $website=''){
-	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', 'n', 'n')",  
+function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP='n'){
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%b', '%s', '%s', '%s', 'n')",  
 				 mysql_real_escape_string($username), 
 				 mysql_real_escape_string($password),
 				 mysql_real_escape_string($email),
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
-				 mysql_real_escape_string($website));
+				 mysql_real_escape_string($website),
+				 mysql_real_escape_string($VIP));
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
 		return true;
@@ -325,7 +328,7 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 function getRecentAnswers($U_ID, $offset, $amt){
 	$len = 0;
 	$ans = Array();
-	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d AND Q_ID IN (SELECT Q_ID FROM Question WHERE Q_span != 'y' AND Q_span != 'Y') ".
+	$query = sprintf("SELECT Q_ID, answer_time FROM Answer WHERE U_ID = %d AND Q_ID IN (SELECT Q_ID FROM Question WHERE Q_spam != 'y' AND Q_spam != 'Y') ".
 		"ORDER BY answer_time DESC LIMIT %d, %d",
 				mysql_real_escape_string($U_ID),
 				mysql_real_escape_string($offset),
@@ -350,7 +353,7 @@ function getRecentAnswers($U_ID, $offset, $amt){
 function getRndQuestion($U_ID, $amt){
 	$ans = Array();	
 	$len = 0;
-	$query = sprintf("SELECT Q_ID, content FROM Question WHERE Q_span != 'y' AND Q_span != 'Y' AND Q_ID NOT IN ".
+	$query = sprintf("SELECT Q_ID, content FROM Question WHERE Q_spam != 'y' AND Q_spam != 'Y' AND Q_ID NOT IN ".
 				"(SELECT Q_ID FROM Answer WHERE U_ID = %d) ORDER BY RAND() LIMIT %d", 
 				$U_ID, $amt);
 	$result = mysql_query($query);
@@ -362,7 +365,7 @@ function getRndQuestion($U_ID, $amt){
 }
 
 function getRndU_ID(){
-	$query = "SELECT U_ID FROM User WHERE U_span != 'y' ORDER BY RAND() LIMIT 1";
+	$query = "SELECT U_ID FROM User WHERE U_spam != 'y' ORDER BY RAND() LIMIT 1";
 	$result = mysql_query($query);
 	$row = mysql_fetch_assoc($result);
 	return $row['U_ID'];
