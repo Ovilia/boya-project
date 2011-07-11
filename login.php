@@ -14,7 +14,7 @@ if(!isset($email) || !isset($password) || $email == '' || $password == ''){
 
 require_once('connect.php');
 $query = sprintf("SELECT U_ID, user_name, VIP FROM User WHERE email = '%s' AND user_pw = '%s' AND U_spam != 'y' LIMIT 1",
-				 mysql_real_escape_string($email), mysql_real_escape_string($password));
+				 mysql_real_escape_string($email), substr(md5('boya'.mysql_real_escape_string($password)), 0, 16));
 	
 //echo $query;			 
 $result = mysql_query($query);
@@ -29,6 +29,6 @@ if ($row != null) {
 	header("location:home.php");
 }
 else {
-    echo '<script type="text/javascript">alert("No user matched!"); window.location.href="index.php"</script>';
+    echo '<script type="text/javascript">alert("No user matched!'.substr(md5('boya'.mysql_real_escape_string($password)), 0, 16).'"); window.location.href="index.php"</script>';
 }
 ?>

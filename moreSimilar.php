@@ -14,7 +14,9 @@ for ($i = 0; $i < count($similar); ++$i){
 	echo "<a href=\"user.php?U_ID=".$similar[$i]['U_ID']."\">".
 	"<img src=\"".$logo."\" width=\"50px\" height=\"50px\" ".	
 	"title=\"".$username."(相似度: ".
-	number_format($similar[$i]['similar'] * 100, 2)."%)\" style=\"margin: 3px;\" /></a>";
+	number_format($similar[$i]['similar'] * 100, 2)."%, 置信度: ".
+	number_format(getReliability($similar[$i]['U_ID'], $U_ID) * 100, 2).
+	"%)\" style=\"margin: 3px;\" /></a>";
 }
 
 ?>
