@@ -2,7 +2,7 @@
 require_once("function.php");
 
 function startInsert($offset, $amt){
-	/*
+	
 	echo "insertUser, insertQuestion";
 	for ($i = 0; $i < $amt; ++$i){
 		if ($i % 1000 == 0)
@@ -16,7 +16,7 @@ function startInsert($offset, $amt){
 		
 		insertUser("username".$index, "password".$index, "email".$index."@boya.com", "", "", "", $VIP);					
 		insertQuestion("你是否喜欢".$index);
-	}*/
+	}
 	
 	//echo "insertAnswer";
 	$str = "insert into Answer values ";
@@ -33,7 +33,7 @@ function startInsert($offset, $amt){
 	}
 	$str .= ";";
 	echo $str;
-	/*
+	
 	echo "insertFollow";
 	for ($i = 0; $i < $ansAmt; ++$i){	
 		echo $i." ";
@@ -41,10 +41,10 @@ function startInsert($offset, $amt){
 			$rnd = rand(0, $amt);
 			setFollow($i, $rnd);
 		}
-	}*/
+	}
 
 }
 
-startInsert(0, 100000);
+startInsert(0, 10000);
 
 ?>
