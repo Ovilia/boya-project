@@ -218,6 +218,36 @@ function getMostSimilar($U_ID, $offset, $size){
 	return $ans;
 }
 
+function getMostSimilar2($U_ID, $offset, $size){
+    $link = mysqli_connect("localhost", "root", "tecton", "BoYa");
+	/* check connection */
+	if (mysqli_connect_errno()) {
+		printf("Connect failed: %s", mysqli_connect_error());
+		exit();
+	}
+	$query = sprintf("SELECT U_ID, getSimilarity(U_ID, %s) AS similar FROM Answer WHERE U_ID != %s GROUP BY U_ID ORDER BY similar DESC LIMIT %s, %s",
+				$U_ID, $U_ID, $offset, $size);
+	$len = 0;
+	$ans = Array();
+	if(mysqli_multi_query($link, $query)){
+		do{
+			if($result = mysqli_store_result($link)){
+				while($row = mysqli_fetch_row($result)){
+					$ans[$len]['U_ID'] = $row[0];
+					$ans[$len]['similar'] = $row[1];
+					$len++;
+				}
+				mysqli_free_result($result);
+			}
+			if (!mysqli_more_results($link)){
+				break;
+			}
+		}while (mysqli_next_result($link));
+	}
+	mysqli_close($link);
+	return $ans;
+}
+
 function isAnswered($U_ID, $Q_ID){
 	$query = sprintf("SELECT * FROM Answer WHERE U_ID = %s and Q_ID = %s LIMIT 1",
 					 $U_ID, $Q_ID);
@@ -265,20 +295,25 @@ function setUnfollow($followerID, $followingID){
 }
 
 function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP=0){
-	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%s', '%s', '%s', %d, 'n')",  
-				 mysql_real_escape_string($username), 
+    if (strcmp($email, "f") == 0 || strcmp($email, "F") == 0
+        ||strcmp($email, "M") == 0 || strcmp($email, "m") == 0){
+	   $query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%s', '%s', '%s', %d, 'n')",  
+		  		 mysql_real_escape_string($username), 
 				 substr(md5('boya'.mysql_real_escape_string($password)), 0, 16),
 				 mysql_real_escape_string($email),
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
 				 mysql_real_escape_string($website),
 				 $VIP);
-	$result = mysql_query($query);
-	if (mysql_affected_rows() > 0) {
-		return true;
-	} else {
-		return false;
+	   $result = mysql_query($query);
+	   if (mysql_affected_rows() > 0) {
+		  return true;
+	   } else {
+		  return false;
+	   }
 	}
+	else
+	   return false;
 }
 
 function updateUser($U_ID, $username, $email, $male='', $birthday='', $website=''){
@@ -309,6 +344,24 @@ function insertQuestion($content){
 	}		
 }
 
+function insertSimilarProcedure($U_ID, $num){
+    $query = sprintf("insert into Similar(U_ID1, U_ID2, similarity)"
+                    . " SELECT %s, U_ID, getSimilarity(%s, U_ID) AS similar FROM Answer "
+                    . "WHERE %s != U_ID AND (%d OR getSimilarity(%s, U_ID) != 0)"
+                    . "GROUP BY U_ID;",
+                    $U_ID,
+                    $U_ID,
+                    $U_ID,
+                    $num,
+                    $U_ID);
+    $result = mysql_query($query);
+    if (mysql_affected_rows() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function insertAnswer($U_ID, $Q_ID, $answer){
 	$query = sprintf("INSERT INTO Answer VALUES(%s, %s, default, '%s')",
 				mysql_real_escape_string($U_ID), 
@@ -316,7 +369,8 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 				mysql_real_escape_string($answer));
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
-		return true;
+	    if (insertSimilarProcedure(mysql_real_escape_string($U_ID), 0))
+    		return true;
 	} else {
 		return $query;
 	}	
