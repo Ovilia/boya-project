@@ -197,10 +197,8 @@
             <div id="right">
 			</div>
         </div>
-        <div id="footer">
-            <hr>
-			伯牙网 www.boya.vv.cc<br>
-			开发人员 张雯莉 zwl.sjtu@gmail.com
-        </div>
+		<?php
+		require_once("footer.php");
+		?>
     </body>
 </html>
