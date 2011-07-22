@@ -18,7 +18,7 @@
 		<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
 		
 		 <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
-        djConfig="parseOnLoad: true">
+        djConfig="parseOnLoad: true"></script>
 		<script type="text/javascript">
             dojo.require("dijit.form.CheckBox");
             dojo.require("dijit.form.DateTextBox");
