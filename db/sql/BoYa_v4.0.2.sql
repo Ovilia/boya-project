@@ -4,23 +4,12 @@
 /*==============================================================*/
 
 
-drop trigger similarInsertTrigger;
-
-drop trigger similarDeleteTrigger;
-
-drop trigger similarUpdateTrigger;
-
-drop trigger checkGenderTrigger;
 
 drop function if exists getIntersetQuesAmt;
-
-drop procedure if exists getMostSimilar;
 
 drop function if exists getSimilarity;
 
 drop function if exists getUnionQuesAmt;
-
-drop procedure if exists insertSimilarProc;
 
 drop table if exists Admin;
 
@@ -191,24 +180,6 @@ delimiter ;
 
 
 delimiter $$
-create procedure getMostSimilar (IN vU_ID INT, IN voffset INT, IN vsize INT)
-BEGIN
-set @offset = voffset;
-set @size = vsize;
-set @uid = vU_ID;
-
-prepare SimilarStmt from
-"SELECT U_ID, getSimilarity(U_ID, ?) AS similar FROM Answer WHERE U_ID != ? GROUP BY U_ID ORDER BY similar DESC LIMIT ?, ?";
-
-execute SimilarStmt using @uid, @uid, @offset, @size;
-deallocate prepare SimilarStmt;
-END
-$$
-
-delimiter ;
-
-
-delimiter $$
 create function getSimilarity (U_ID1 INT, U_ID2 INT) 
 RETURNS FLOAT
 
@@ -251,59 +222,4 @@ RETURN (quesAmt);
 END
 $$
 
-delimiter ;
-
-
-delimiter $$
-create procedure insertSimilarProc (IN inU_ID INT, IN insertZero INT)
-begin
-insert into Similar(U_ID1, U_ID2, similarity)
-SELECT inU_ID, U_ID, getSimilarity(inU_ID, U_ID) AS similar
-FROM Answer 
-WHERE inU_ID != U_ID AND (insertZero OR getSimilarity(inU_ID, U_ID) != 0)
-GROUP BY U_ID;
-end$$
-delimiter ;
-
-
-delimiter $$
-create trigger similarInsertTrigger 
-after insert on Answer
-for each row
-begin
-call insertSimilarProc(new.U_ID, 0);
-end$$
-delimiter ;
-
-
-delimiter $$
-create trigger similarDeleteTrigger 
-after delete on Answer
-for each row
-begin
-call insertSimilarProc(old.U_ID, 1);
-end$$
-delimiter ;
-
-
-delimiter $$
-create trigger similarUpdateTrigger 
-after update on Answer
-for each row
-begin
-call insertSimilarProc(new.U_ID, 0);
-call insertSimilarProc(old.U_ID, 1);
-end$$
-delimiter ;
-
-delimiter $$
-CREATE TRIGGER checkGenderTrigger 
-BEFORE INSERT ON User
-FOR EACH ROW
-BEGIN
-IF (NEW.gender != 'f' AND NEW.gender != 'F' AND NEW.gender != 'm' AND NEW.gender != 'M')
-THEN
-    insert into Answer values (1);
-END IF;
-END$$
 delimiter ;
