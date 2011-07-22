@@ -1,9 +1,6 @@
 <?php
 
-if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 'y')
-	require_once('adminConnect.php');
-else
-	require_once('connect.php');
+require_once('connect.php');
 
 function getUsername($U_ID){	
 	$query = sprintf("SELECT user_name FROM User WHERE U_ID = %s LIMIT 1", $U_ID);

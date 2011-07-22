@@ -178,7 +178,7 @@
 								</td><td>
 									<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
 									trim=true id="username" name="username" required="true" 
-									regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" 
+									regExp="[A-Za-z0-9]{4,}" invalidMessage="无效的用户名" 
 									promptMessage="用户名至少为4-16个字符的英文字母或是数字"
 									value="<?php echo getUsername($_SESSION['U_ID']);?>">
 								</td>
@@ -246,7 +246,7 @@
 								</td><td>
 									<input type="password" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
 									trim=true id="password" name="password" required="true" 
-									regExp="[A-Za-z0-9_]{5,}" invalidMessage="无效的密码" 
+									regExp="[A-Za-z0-9_]{4,}" invalidMessage="无效的密码" 
 									promptMessage="密码至少为4-16个字符的英文字母、数字或下划线">
 								</td>
 							</tr>
@@ -257,7 +257,7 @@
 								</td><td>
 									<input type="password" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
 									trim=true id="newpassword" name="newpassword" required="true" 
-									regExp="[A-Za-z0-9_]{5,}" invalidMessage="无效的密码" 
+									regExp="[A-Za-z0-9_]{4,}" invalidMessage="无效的密码" 
 									promptMessage="密码至少为4-16个字符的英文字母、数字或下划线">
 								</td>
 							</tr>
@@ -279,10 +279,8 @@
 				</div>
             </div>
         </div>
-        <div id="footer">
-            <hr>
-			伯牙网 www.boya.vv.cc<br>
-			开发人员 张雯莉 zwl.sjtu@gmail.com
-        </div>
+		<?php
+		require_once("footer.php");
+		?>
     </body>
 </html>
