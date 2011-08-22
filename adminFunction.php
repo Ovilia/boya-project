@@ -1,5 +1,5 @@
 <?php
-require_once("adminConnect.php");
+require_once("connect.php");
 
 function deleteUser($U_ID){
 	$query = sprintf("DELETE FROM User WHERE U_ID = %d LIMIT 1", $U_ID);
