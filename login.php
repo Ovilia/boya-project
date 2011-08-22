@@ -25,8 +25,8 @@ if ($row != null) {
     $_SESSION['U_ID'] = $row['U_ID'];
     $_SESSION['user_name'] = $row['user_name'];
     $_SESSION['VIP'] = $row['VIP'];
-    $_SESSION['email'] = $email;
-	header("location:home.php");
+    $_SESSION['email'] = $email;	
+    header("location:home.php");
 }
 else {
     echo '<script type="text/javascript">alert("No user matched!'.substr(md5('boya'.mysql_real_escape_string($password)), 0, 16).'"); window.location.href="index.php"</script>';

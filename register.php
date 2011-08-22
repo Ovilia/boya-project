@@ -1,3 +1,7 @@
+<?php
+error_reporting(0);//turn off error reporting
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
@@ -10,7 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
 		<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
 		
-		<!--link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
+		<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
 		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
 		
 		<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
@@ -119,7 +123,7 @@
 				3.查看全站相似用户<br>
 				4.伯牙子期相遇<br>
             </div>
-            <div id="right">
+            <div id="right" style="color: #333 !important;">
 				<h2 style="margin:0px;">
 					注册 - 伯牙网
 				</h2>
