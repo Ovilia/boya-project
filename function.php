@@ -157,7 +157,23 @@ function getSimilarity($U_ID1, $U_ID2){
 	}
 }
 
-function getIntersetQuesAmt($U_ID1, $U_ID2){
+function getSimilarityFunc($U_ID1, $U_ID2){
+    $common = getIntersetQuesAmt($U_ID1, $U_ID2);
+    $same = 0;
+    $similarity = 0;
+    if ($common == 0)
+        $similarity = 0;
+    else{
+        $query = sprintf("SELECT COUNT(*) as count FROM Answer as ans1, Answer as ans2 WHERE ans1.U_ID = %s AND ans2.U_ID = %s AND ans1.Q_ID = ans2.Q_ID AND ans1.answer = ans2.answer;", $U_ID1,  $U_ID2);
+        $result = mysql_query($query);
+        $row = mysql_fetch_assoc($result);
+        $same = $row['count'];
+        $similarity = $same / $common;
+    }
+    return $similarity;
+}
+
+function getIntersetQuesAmt2($U_ID1, $U_ID2){
 	$query = sprintf("SELECT getIntersetQuesAmt(%s, %s) as amt", $U_ID1, $U_ID2);
 	$result = mysql_query($query);
 	if (!$result){
@@ -171,8 +187,33 @@ function getIntersetQuesAmt($U_ID1, $U_ID2){
 	}
 }
 
-function getUnionQuesAmt($U_ID1, $U_ID2){
+function getIntersetQuesAmt($U_ID1, $U_ID2){
+	$query = sprintf("SELECT COUNT(*) as amt FROM Answer WHERE Q_ID IN(SELECT Q_ID FROM Answer WHERE U_ID = %s) AND U_ID = %s", $U_ID1, $U_ID2);
+	$result = mysql_query($query);
+	if (!$result){
+		return $query;
+	}
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return $row['amt'];
+	}else{
+		return 0;
+	}
+}
+
+function getUnionQuesAmt2($U_ID1, $U_ID2){
 	$query = sprintf("SELECT getUnionQuesAmt(%s, %s) as amt", $U_ID1, $U_ID2);
+	$result = mysql_query($query);
+	$row = mysql_fetch_assoc($result);
+	if ($row != null) {
+		return $row['amt'];
+	}else{
+		return 0;
+	}
+}
+
+function getUnionQuesAmt($U_ID1, $U_ID2){
+	$query = sprintf("SELECT COUNT(DISTINCT Q_ID) AS amt FROM Answer WHERE U_ID = %s OR U_ID = %s;", $U_ID1, $U_ID2);
 	$result = mysql_query($query);
 	$row = mysql_fetch_assoc($result);
 	if ($row != null) {
@@ -188,8 +229,8 @@ function getReliability($U_ID1, $U_ID2){
 	return getIntersetQuesAmt($U_ID1, $U_ID2) / getUnionQuesAmt($U_ID1, $U_ID2);
 }
 
-function getMostSimilar($U_ID, $offset, $size){
-	$link = mysqli_connect("localhost", "root", "tecton", "BoYa");
+function getMostSimilar3($U_ID, $offset, $size){
+	$link = mysqli_connect("127.0.0.1:3306:/var/lib/mysql/mysql.sock", "root", "tecton", "BoYa");
 	/* check connection */
 	if (mysqli_connect_errno()) {
 		printf("Connect failed: %s", mysqli_connect_error());
@@ -219,7 +260,7 @@ function getMostSimilar($U_ID, $offset, $size){
 }
 
 function getMostSimilar2($U_ID, $offset, $size){
-    $link = mysqli_connect("localhost", "root", "tecton", "BoYa");
+    $link = mysqli_connect("127.0.0.1:3306:/var/lib/mysql/mysql.sock", "root", "tecton", "BoYa");
 	/* check connection */
 	if (mysqli_connect_errno()) {
 		printf("Connect failed: %s", mysqli_connect_error());
@@ -246,6 +287,44 @@ function getMostSimilar2($U_ID, $offset, $size){
 	}
 	mysqli_close($link);
 	return $ans;
+}
+
+function getMostSimilar($U_ID, $offset, $size){
+    $link = mysqli_connect("127.0.0.1:3306:/var/lib/mysql/mysql.sock", "root", "tecton", "BoYa");
+	/* check connection */
+	if (mysqli_connect_errno()) {
+		printf("Connect failed: %s", mysqli_connect_error());
+		exit();
+	}
+	$query = "SELECT U_ID FROM Answer WHERE U_ID != 1 GROUP BY U_ID";
+	//echo "<script language=\"JavaScript\">alert(\"12\");</script>";
+	$len = 0;
+	$ans = Array();
+	if(mysqli_multi_query($link, $query)){
+		do{
+			if($result = mysqli_store_result($link)){
+				while($row = mysqli_fetch_row($result)){
+					$ans[$len]['U_ID'] = $row[0];
+					$ans[$len]['similar'] = getSimilarityFunc($row[0], $U_ID);
+					$len++;
+				}
+				mysqli_free_result($result);
+			}
+			if (!mysqli_more_results($link)){
+				break;
+			}
+		}while (mysqli_next_result($link));
+	}
+	mysqli_close($link);
+	$sorted_ans = sortBySimilarity($ans, $offset, $size);
+	return $sorted_ans;
+}
+
+function sortBySimilarity($ans, $offset, $size){
+    $sorted = Array();
+    $sorted[0] = $ans[0];
+    $sorted[1] = $ans[1];
+    return $sorted;
 }
 
 function isAnswered($U_ID, $Q_ID){
@@ -294,23 +373,40 @@ function setUnfollow($followerID, $followingID){
 	}
 }
 
-function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP=0){
-    if (strcmp($email, "f") == 0 || strcmp($email, "F") == 0
-        ||strcmp($email, "M") == 0 || strcmp($email, "m") == 0){
-	   $query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%s', '%s', '%s', %d, 'n')",  
-		  		 mysql_real_escape_string($username), 
+function insertUser2($username, $password, $email, $male='', $birthday='', $website='', $VIP=0){
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%s', '%s', '%s', %d, 'n')",  
+				 mysql_real_escape_string($username), 
 				 substr(md5('boya'.mysql_real_escape_string($password)), 0, 16),
 				 mysql_real_escape_string($email),
 				 mysql_real_escape_string($male),
 				 mysql_real_escape_string($birthday),
 				 mysql_real_escape_string($website),
 				 $VIP);
-	   $result = mysql_query($query);
-	   if (mysql_affected_rows() > 0) {
-		  return true;
-	   } else {
-		  return false;
-	   }
+	$result = mysql_query($query);
+	if (mysql_affected_rows() > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function insertUser($username, $password, $email, $male='', $birthday='', $website='', $VIP=0){
+    if (strcmp($male, "") == 0 || (strcmp($male, "f") == 0 || strcmp($male, "F") == 0
+    || strcmp($male, "M") == 0 || strcmp($male, "m") == 0)){
+	$query = sprintf("INSERT INTO User VALUES(default, '%s', '%s', '%s', default, '%s', '%s', '%s', %d, 'n')",  
+				 mysql_real_escape_string($username), 
+				 substr(md5('boya'.mysql_real_escape_string($password)), 0, 16),
+				 mysql_real_escape_string($email),
+				 mysql_real_escape_string($male),
+				 mysql_real_escape_string($birthday),
+				 mysql_real_escape_string($website),
+				 $VIP);
+	$result = mysql_query($query);
+	if (mysql_affected_rows() > 0) {
+		return true;
+	} else {
+		return false;
+	}
 	}
 	else
 	   return false;
@@ -369,8 +465,8 @@ function insertAnswer($U_ID, $Q_ID, $answer){
 				mysql_real_escape_string($answer));
 	$result = mysql_query($query);
 	if (mysql_affected_rows() > 0) {
-	    if (insertSimilarProcedure(mysql_real_escape_string($U_ID), 0))
-    		return true;
+	   if (insertSimilarProcedure(mysql_real_escape_string($U_ID), 0))
+		  return true;
 	} else {
 		return $query;
 	}	
@@ -525,12 +621,13 @@ function emailExist($email){
 }
 
 function resetPassword($email){
-	$password = substr(md5(rand(0, 100).$email), 0, 16);
+    $raw_password = rand(0,100).$email;
+	$password = substr(md5($raw_password), 0, 16);
 	$query = sprintf("UPDATE User SET user_pw = '%s' WHERE email = '%s' LIMIT 1",
 					$password, $email);
 	$result = mysql_query($query);	
 	if (mysql_affected_rows() > 0) {
-		return $password;
+		return $raw_password;
 	} else {
 		return false;
 	}	

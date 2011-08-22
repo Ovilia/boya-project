@@ -11,8 +11,8 @@ if (substr($website, 0, 4) != "http")
 require_once('function.php');
 
 if (insertUser($username, $password, $email, $gender, $birthday, $website)){
-	echo "<script language=\"JavaScript\">alert(\"×¢²á³É¹¦!\");window.location.href=\"index.php\"; </script>";
+	echo "<script language=\"JavaScript\">alert(\"æ³¨å†ŒæˆåŠŸ!\");window.location.href=\"index.php\"; </script>";
 } else {
-	echo "<script language=\"JavaScript\">alert(\"×¢²áÊ§°Ü!\");window.location.href=\"register.php\"; </script>";
+	echo "<script language=\"JavaScript\">alert(\"æ³¨å†Œå¤±è´¥!\");window.location.href=\"register.php\"; </script>";
 }
 ?>

@@ -10,15 +10,14 @@
 		<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.13.custom.css" />
 		<link rel="stylesheet" type="text/css" href="js/plugins/buttonCaptcha/jquery.buttonCaptcha.styles.css" />
 		
-		<!--<link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">-->
+		<!--link rel="stylesheet" type="text/css" href="js/dojo/resources/dojo.css">
 		<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
 		
 		<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
 		<script type="text/javascript" language="javascript" src="js/plugins/buttonCaptcha/jquery.buttonCaptcha.min.js"></script>
 		
-		 <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
-        djConfig="parseOnLoad: true"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" djConfig="parseOnLoad:true"></script>
 		<script type="text/javascript">
             dojo.require("dijit.form.CheckBox");
             dojo.require("dijit.form.DateTextBox");
@@ -105,7 +104,7 @@
             </script>
     </head>
 	
-    <body class="claro" style="font-size:15px; color:#333">
+    <body class="claro" style="font-size:15px;">
         <div id="top">
             <a href="index.php"><img src="images/title.png" height=45px style="float: left; margin-left: 30px; margin-right: 30px;"/></a>
             <div id="nav">
@@ -135,7 +134,7 @@
 							</td><td>
 								<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
 								trim=true id="username" name="username" required="true" 
-								regExp="[A-Za-z0-9]{4,}" invalidMessage="无效的用户名" 
+								regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" 
 								promptMessage="用户名至少为4-16个字符的英文字母或是数字">
 							</td>
 						</tr>
@@ -147,7 +146,7 @@
 							</td><td>
 								<input type="password" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
 								trim=true id="password" name="password" required="true" 
-								regExp="[A-Za-z0-9_]{4,}" invalidMessage="无效的密码" 
+								regExp="[A-Za-z0-9_]{5,}" invalidMessage="无效的密码" 
 								promptMessage="密码至少为4-16个字符的英文字母、数字或下划线">
 							</td>
 						</tr>
@@ -206,7 +205,7 @@
         </div>
 		
 		<?php
-		require_once("footer.php");
-		?>
+		  require_once("footer.php");
+		 ?>
     </body>
 </html>

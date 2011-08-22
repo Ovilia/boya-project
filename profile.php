@@ -178,7 +178,7 @@
 								</td><td>
 									<input type="text" maxlength="16" dojoType="dijit.form.ValidationTextBox" 
 									trim=true id="username" name="username" required="true" 
-									regExp="[A-Za-z0-9]{4,}" invalidMessage="无效的用户名" 
+									regExp="[A-Za-z0-9]{5,}" invalidMessage="无效的用户名" 
 									promptMessage="用户名至少为4-16个字符的英文字母或是数字"
 									value="<?php echo getUsername($_SESSION['U_ID']);?>">
 								</td>
@@ -279,8 +279,8 @@
 				</div>
             </div>
         </div>
-		<?php
-		require_once("footer.php");
-		?>
+        <?php
+            require_once("footer.php");
+        ?>
     </body>
 </html>
