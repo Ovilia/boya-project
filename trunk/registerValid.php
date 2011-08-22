@@ -5,7 +5,7 @@ $username = $_POST['username'];
 $gender = $_POST['gender'];
 $birthday = $_POST['birthday'];
 $website = $_POST['website'];
-if (substr($website, 0, 4) != "http")
+if ($website != null && $website != "" && substr($website, 0, 4) != "http")
 	$website = "http://".$website;
 
 require_once('function.php');

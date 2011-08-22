@@ -1,13 +1,16 @@
+<?php
+session_start();
+error_reporting(0);//turn off error reporting
+require_once('PhpConsole.php');
+PhpConsole::start(true, true, dirname(__FILE__));        
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>BoYa</title>
         <?php
-        require_once('PhpConsole.php');
-		PhpConsole::start(true, true, dirname(__FILE__));
-		
-        session_start();
         require_once('isLogin.php');
         require_once('function.php');
         if (!isLogin()) {
@@ -47,7 +50,9 @@
             ?>
             var curQuestion = 0;
             function loadQuestion(index){     
-                $("#questionPanel").text(questionList[index]['content']);
+		if (questionList != ''){
+	                $("#questionPanel").text(questionList[index]['content']);
+		}
             };
             
             function requestQuestion(){
@@ -77,6 +82,10 @@
 			}
 			
 			function answer(ans){
+				if (questionList == ''){
+					return;
+				}
+
 				curQuestion++;
 				if (ans == 'y' || ans == 'n'){
 					if (curQuestion > questionList.length){
