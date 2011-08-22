@@ -5,32 +5,6 @@
 
 
 
-drop function if exists getIntersetQuesAmt;
-
-drop function if exists getSimilarity;
-
-drop function if exists getUnionQuesAmt;
-
-drop table if exists Admin;
-
-drop index answerTimeIndex on Answer;
-
-drop table if exists Answer;
-
-drop index followTimeIndex on Follow;
-
-drop table if exists Follow;
-
-drop table if exists Question;
-
-drop index similarIndex on Similar;
-
-drop index similarTimeInedx on Similar;
-
-drop table if exists Similar;
-
-drop table if exists User;
-
 /*==============================================================*/
 /* Table: Admin                                                 */
 /*==============================================================*/
@@ -158,26 +132,6 @@ alter table Similar add constraint FK_Similar2 foreign key (U_ID1)
       references User (U_ID) on delete cascade on update cascade;
 
 
-delimiter $$
-create function getIntersetQuesAmt (U_ID1 INT, U_ID2 INT) 
-RETURNS INT
-
-BEGIN
-DECLARE quesAmt INT;
-
-SELECT COUNT(*) AS amt INTO quesAmt
-FROM Answer
-WHERE Q_ID IN(
-    SELECT Q_ID FROM Answer
-    WHERE U_ID = U_ID1
-) AND U_ID = U_ID2;
-
-RETURN (quesAmt);
-END
-$$
-
-delimiter ;
-
 
 delimiter $$
 create function getSimilarity (U_ID1 INT, U_ID2 INT) 
@@ -201,24 +155,6 @@ ELSE
 END IF;
 
 RETURN (similarity);
-END
-$$
-
-delimiter ;
-
-
-delimiter $$
-create function getUnionQuesAmt (U_ID1 INT, U_ID2 INT) 
-RETURNS INT
-
-BEGIN
-DECLARE quesAmt INT;
-
-SELECT COUNT(DISTINCT Q_ID) AS amt INTO quesAmt
-FROM Answer
-WHERE U_ID = U_ID1 OR U_ID = U_ID2;
-
-RETURN (quesAmt);
 END
 $$
 

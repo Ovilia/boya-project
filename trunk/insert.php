@@ -14,10 +14,10 @@ function startInsert($offset, $amt){
 		else
 			$VIP = 0;
 		
-		insertUser("username".$index, "password".$index, "email".$index."@boya.com", "", "", "", $VIP);					
-		insertQuestion("你是否喜欢".$index);
+		insertUser("username".$index, "password".$index, "email".$index."@boya.com", "f", "", "", $VIP);					
+		insertQuestion("do you like".$index);
 	}
-	
+	/*
 	//echo "insertAnswer";
 	$str = "insert into Answer values ";
 	for ($i = 1; $i < 100; ++$i){
@@ -35,16 +35,16 @@ function startInsert($offset, $amt){
 	echo $str;
 	
 	echo "insertFollow";
-	for ($i = 0; $i < $ansAmt; ++$i){	
+	for ($i = 0; $i < $amt; ++$i){	
 		echo $i." ";
 		for ($j = 0; $j < 200; ++$j){	
 			$rnd = rand(0, $amt);
 			setFollow($i, $rnd);
 		}
 	}
-
+    */
 }
 
-startInsert(0, 10000);
+startInsert(0, 20);
 
 ?>
